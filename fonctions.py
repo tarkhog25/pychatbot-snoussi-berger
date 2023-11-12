@@ -15,7 +15,7 @@ def repertoire_fichiers(s):
     :return: renvoie une liste contenant les noms de chaque fichiers présent dans le répertoire s
     """
     return [f for f in listdir(f"{s}")]
-    #liste en compréhension qui s'occupe de prendre chaque element du répertoire s
+    # liste en compréhension qui s'occupe de prendre chaque element du répertoire s
 
 
 def exctraction_nom(f):
@@ -39,7 +39,8 @@ def exctraction_nom(f):
 
 def conversion_mini(f):
     """
-    Fonction qui convertit le texte des fichiers en miniscules dans de nouveaux fichier dans le dossier cleaned
+    Fonction qui convertit le texte des fichiers en miniscules
+    dans de nouveaux fichier dans le dossier cleaned
     :param f: noms des fichiers sous forme de liste
     :return: renvoie rien et créer les noueaux fichiers dans le dossier cleaned
     """
@@ -92,7 +93,7 @@ def occ_mots(c):
     mots = c.split()  # création d'une liste correspondant au mots de la chaine de caractères
     for i in mots:
         occ = 0
-        if i not in dic.keys(): # Afin d'éviter de faire des boucles inutiles si le mots a déjà été traité
+        if i not in dic.keys():  # Afin d'éviter de faire des boucles inutiles si le mots a déjà été traité
             for j in mots:
                 if j == i:
                     occ += 1
@@ -106,12 +107,15 @@ def idf_mots(s):
     :param s: chaine de caractère représentant le répertoire où les fichiers du corpus sont présent
     :return: un dictionnaire {mot : score IDF}
     """
-    mots_fichier = mots_fichiers(s)
-    for i in mots_fichier:
-        mots = mots_fichier[i]
-        for
-
-
+    idf_dic = {}
+    nb_fichiers = len(repertoire_fichiers(s))  # Récuparation du nombre de fichiers dans le répertoire s
+    for mot in mots_fichiers(s):
+        proportion = 0
+        for liste_mots in mots_par_fichiers(s).values():
+            if mot in liste_mots:
+                proportion += 1
+        idf_dic[mot] = log(nb_fichiers / proportion)  # Calcule de l'IDF du mots à l'aide de la fonction log
+    return idf_dic
 
 
 def mots_par_fichiers(s):
@@ -127,8 +131,8 @@ def mots_par_fichiers(s):
 
     dic = {}
 
-    for fichier in fichiers: # Pour chaque fichier dans le répertoire
-        with open(fichier, "r") as f1:
+    for fichier in fichiers:  # Pour chaque fichier dans le répertoire
+        with open(f"{s}/{fichier}", "r") as f1:
             mots = []
             contenues = f1.readlines()
             for ligne in contenues:
@@ -138,7 +142,6 @@ def mots_par_fichiers(s):
     return dic
 
 
-
 def mots_fichiers(s):
     """
     fonction qui récupére chaque mots de tous les fichiers présent dans le répertoire,
@@ -146,15 +149,14 @@ def mots_fichiers(s):
     :param s: chaine de caractère représentant le répertoire où les fichiers du corpus sont présent
     :return: une liste contenant tous les mots UNIQUES (sans doublons) présent des tous les fichiers
     """
-    fichiers = [f for f in listdir(f"{s}")]
-    # Récupération des noms de chaque fichiers dans le répertoire s
-
-
-
-
-
-
-
-
-
-
+    fichiers = repertoire_fichiers(s)
+    # Récupération des fichiers dans le répertoire s
+    mots = []
+    for fichier in fichiers:
+        with open(f"{s}/{fichier}", "r") as f1:
+            contenues = f1.readlines()
+        for ligne in contenues:
+            for mot in ligne.split():  # séparation de chaque mots à l'aide de la method .split()
+                if mot not in mots:
+                    mots.append(mot)
+    return mots
