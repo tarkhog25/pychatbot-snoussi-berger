@@ -8,13 +8,13 @@ from os import listdir
 #################################################################
 
 # Toutes les fonctions de bases
-def repertoire_fichiers(s):
+def repertoire_fichiers(r):
     """
     Fonction qui récupére tous les fichiers présents d'un certain répertoire
-    :param s: chaine de caractère représentant le répertoire où les fichiers du corpus sont présent
+    :param r: chaine de caractère représentant le répertoire où les fichiers du corpus sont présent
     :return: renvoie une liste contenant les noms de chaque fichiers présent dans le répertoire s
     """
-    return [f for f in listdir(f"{s}")]
+    return [f for f in listdir(f"{r}")]
     # liste en compréhension qui s'occupe de prendre chaque element du répertoire s
 
 
@@ -101,38 +101,38 @@ def occ_mots(c):
     return dic
 
 
-def idf_mots(s):
+def idf_mots(r):
     """
     Fonction qui calclule le score IDF de chaque mots des fichiers d'un corpus
-    :param s: chaine de caractère représentant le répertoire où les fichiers du corpus sont présent
+    :param r: chaine de caractère représentant le répertoire où les fichiers du corpus sont présent
     :return: un dictionnaire {mot : score IDF}
     """
     idf_dic = {}
-    nb_fichiers = len(repertoire_fichiers(s))  # Récuparation du nombre de fichiers dans le répertoire s
-    for mot in mots_fichiers(s):
+    nb_fichiers = len(repertoire_fichiers(r))  # Récuparation du nombre de fichiers dans le répertoire s
+    for mot in mots_fichiers(r):
         proportion = 0
-        for liste_mots in mots_par_fichiers(s).values():
+        for liste_mots in mots_par_fichiers(r).values():
             if mot in liste_mots:
                 proportion += 1
         idf_dic[mot] = log(nb_fichiers / proportion)  # Calcule de l'IDF du mots à l'aide de la fonction log
     return idf_dic
 
 
-def mots_par_fichiers(s):
+def mots_par_fichiers(r):
     """
     fonction qui récupére chaque mots d'un fichier les mettant dans une liste et les renvoyant
     sous forme d'un dic
-    :param s: chaine de caractère représentant le répertoire où les fichiers du corpus sont présent
+    :param r: chaine de caractère représentant le répertoire où les fichiers du corpus sont présent
     :return: un dictionnaire {  fichier : [tous les mots du fichiers sous forme de liste] }
     """
 
-    fichiers = repertoire_fichiers(s)
+    fichiers = repertoire_fichiers(r)
     # Récupération des noms de chaque fichiers dans le répertoire s
 
     dic = {}
 
     for fichier in fichiers:  # Pour chaque fichier dans le répertoire
-        with open(f"{s}/{fichier}", "r") as f1:
+        with open(f"{r}/{fichier}", "r") as f1:
             mots = []
             contenues = f1.readlines()
             for ligne in contenues:
@@ -142,18 +142,18 @@ def mots_par_fichiers(s):
     return dic
 
 
-def mots_fichiers(s):
+def mots_fichiers(r):
     """
     fonction qui récupére chaque mots de tous les fichiers présent dans le répertoire,
     il récupére une fois chaque mots !!
-    :param s: chaine de caractère représentant le répertoire où les fichiers du corpus sont présent
+    :param r: chaine de caractère représentant le répertoire où les fichiers du corpus sont présent
     :return: une liste contenant tous les mots UNIQUES (sans doublons) présent des tous les fichiers
     """
-    fichiers = repertoire_fichiers(s)
+    fichiers = repertoire_fichiers(r)
     # Récupération des fichiers dans le répertoire s
     mots = []
     for fichier in fichiers:
-        with open(f"{s}/{fichier}", "r") as f1:
+        with open(f"{r}/{fichier}", "r") as f1:
             contenues = f1.readlines()
         for ligne in contenues:
             for mot in ligne.split():  # séparation de chaque mots à l'aide de la method .split()
