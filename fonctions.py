@@ -12,10 +12,10 @@ def repertoire_fichiers(r):
     """
     Fonction qui récupére tous les fichiers présents d'un certain répertoire
     :param r: chaine de caractère représentant le répertoire où les fichiers du corpus sont présent
-    :return: renvoie une liste contenant les noms de chaque fichiers présent dans le répertoire s
+    :return: renvoie une liste contenant les noms de chaque fichiers présent dans le répertoire r
     """
     return [f for f in listdir(f"{r}")]
-    # liste en compréhension qui s'occupe de prendre chaque element du répertoire s
+    # liste en compréhension qui s'occupe de prendre chaque element du répertoire r
 
 
 def exctraction_nom(f):
@@ -103,12 +103,12 @@ def occ_mots(c):
 
 def idf_mots(r):
     """
-    Fonction qui calclule le score IDF de chaque mots des fichiers d'un corpus
+    Fonction qui calclule le score IDF de chaque mot des fichiers d'un corpus
     :param r: chaine de caractère représentant le répertoire où les fichiers du corpus sont présent
     :return: un dictionnaire {mot : score IDF}
     """
     idf_dic = {}
-    nb_fichiers = len(repertoire_fichiers(r))  # Récuparation du nombre de fichiers dans le répertoire s
+    nb_fichiers = len(repertoire_fichiers(r))  # Récuparation du nombre de fichiers dans le répertoire r
     for mot in mots_fichiers(r):
         proportion = 0
         for liste_mots in mots_par_fichiers(r).values():
@@ -127,7 +127,7 @@ def mots_par_fichiers(r):
     """
 
     fichiers = repertoire_fichiers(r)
-    # Récupération des noms de chaque fichiers dans le répertoire s
+    # Récupération des noms de chaque fichiers dans le répertoire r
 
     dic = {}
 
@@ -147,10 +147,10 @@ def mots_fichiers(r):
     fonction qui récupére chaque mots de tous les fichiers présent dans le répertoire,
     il récupére une fois chaque mots !!
     :param r: chaine de caractère représentant le répertoire où les fichiers du corpus sont présent
-    :return: une liste contenant tous les mots UNIQUES (sans doublons) présent des tous les fichiers
+    :return: une liste contenant tous les mots UNIQUES (sans doublons) présent dans tous les fichiers
     """
     fichiers = repertoire_fichiers(r)
-    # Récupération des fichiers dans le répertoire s
+    # Récupération des fichiers dans le répertoire r
     mots = []
     for fichier in fichiers:
         with open(f"{r}/{fichier}", "r") as f1:
@@ -160,3 +160,43 @@ def mots_fichiers(r):
                 if mot not in mots:
                     mots.append(mot)
     return mots
+
+
+def matrice_TF_IDF(r):
+    """
+    Fonction qui créer la matrice TF-IDF où chaque ligne représente un mot
+    et chaque colonne représente un document
+    :param r: chaine de caractère représentant le répertoire où les fichiers du corpus sont présent
+    :return: La matrice TF-IDF
+    """
+    fichiers = repertoire_fichiers(r)
+    mots = mots_fichiers(r)
+    matrix = []
+    for mot in mots:
+        tf_idf_fichiers = []
+        idf = idf_mots(r)[mot]
+        if idf != 0.0:  # Si l'idf = 0.0, il n'est pas nécéssaire de calculer son tf car son score tf-idf vaudra 0.0
+            for fichier in fichiers:
+                tf = 0
+                with open(f"{r}/{fichier}", "r") as f1:
+
+                    contenues = f1.readlines()  # Hésitation sur l'utilisation de read ou readlines
+                for ligne in contenues:
+                    dic_mot_occ = occ_mots(ligne)
+                    if mot in dic_mot_occ.keys():
+                        tf += dic_mot_occ[mot]
+                    """
+                    # Avec l'utilisation de read() à la place de readlines() cela donne : (à partir de la l.181)
+                    contenues = f1.read()
+                if mot in occ_mots(contenues).keys():
+                    tf = occ_mots(contenues)[mot]
+                    """
+                tf_idf_fichiers.append(idf * tf)
+        else:
+            for i in range(len(fichiers)):
+                tf_idf_fichiers.append(
+                    0.0)  # Ajoute du score idf-tf (qui vaut 0.0) par fichiers qu'il y a dans le repertoire
+
+        matrix.append(tf_idf_fichiers)
+
+    return matrix
