@@ -1,14 +1,16 @@
 from os import listdir, mkdir
 from fonctions import *
 
-#Création du dossier "cleaned"
-if "cleaned" not in listdir():
-    mkdir('cleaned')
+if __name__ == "__main__":
+    #Création du dossier "cleaned"
+    rep = "cleaned"
+    if rep not in listdir():
+        mkdir(rep)
+
+    least_important_w(rep)
 
 
-matrix = matrice_TF_IDF("cleaned")
 
-print(matrix)
 
 
 
