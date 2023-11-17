@@ -173,30 +173,44 @@ def matrice_TF_IDF(r):
     mots = mots_fichiers(r)
     matrix = []
     for mot in mots:
-        tf_idf_fichiers = []
         idf = idf_mots(r)[mot]
-        if idf != 0.0:  # Si l'idf = 0.0, il n'est pas nécéssaire de calculer son tf car son score tf-idf vaudra 0.0
+        tf_idf_fichiers = []
+        if idf:
             for fichier in fichiers:
-                tf = 0
-                with open(f"{r}/{fichier}", "r") as f1:
-
-                    contenues = f1.readlines()  # Hésitation sur l'utilisation de read ou readlines
-                for ligne in contenues:
-                    dic_mot_occ = occ_mots(ligne)
-                    if mot in dic_mot_occ.keys():
-                        tf += dic_mot_occ[mot]
-                    """
-                    # Avec l'utilisation de read() à la place de readlines() cela donne : (à partir de la l.181)
-                    contenues = f1.read()
-                if mot in occ_mots(contenues).keys():
-                    tf = occ_mots(contenues)[mot]
-                    """
-                tf_idf_fichiers.append(idf * tf)
+                if mot in tf_fichiers(r)[fichier].keys():
+                    tf = tf_fichiers(r)[fichier][mot]
+                    tf_idf_fichiers.append(idf*tf)
+                else:
+                    tf_idf_fichiers.append(0.0)
         else:
-            for i in range(len(fichiers)):
-                tf_idf_fichiers.append(
-                    0.0)  # Ajoute du score idf-tf (qui vaut 0.0) par fichiers qu'il y a dans le repertoire
-
+            for i in fichiers:
+                tf_idf_fichiers.append(0.0)
         matrix.append(tf_idf_fichiers)
 
     return matrix
+
+
+def tf_fichiers(r):
+    """
+    Fonction qui calcule l'idf de chaque mot dans chaque fichiers
+    :param r: chaine de caractère représentant le répertoire où les fichiers du corpus sont présent
+    :return: dictionnaire { fichier : { mot : tf } }
+    """
+    dic = {}
+    mot_par_fichiers_dic = mots_par_fichiers(r)
+    for fichier in mot_par_fichiers_dic:
+        dic_mot_tf = {}
+        for mot in mot_par_fichiers_dic[fichier]:
+            occ = 0
+            if mot not in dic_mot_tf: #Afin de ne recalculer l'occ d'un mot déjà calculer et gagner en optimisation
+                for mot2 in mot_par_fichiers_dic[fichier]:
+                    if mot == mot2:
+                        occ += 1
+                dic_mot_tf[mot] = occ
+        dic[fichier] = dic_mot_tf
+
+    return dic
+
+
+
+
