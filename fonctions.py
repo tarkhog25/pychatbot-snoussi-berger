@@ -179,7 +179,7 @@ def matrice_TF_IDF(r):
             for fichier in fichiers:
                 if mot in tf_fichiers(r)[fichier].keys():
                     tf = tf_fichiers(r)[fichier][mot]
-                    tf_idf_fichiers.append(idf*tf)
+                    tf_idf_fichiers.append(idf * tf)
                 else:
                     tf_idf_fichiers.append(0.0)
         else:
@@ -202,7 +202,7 @@ def tf_fichiers(r):
         dic_mot_tf = {}
         for mot in mot_par_fichiers_dic[fichier]:
             occ = 0
-            if mot not in dic_mot_tf: #Afin de ne recalculer l'occ d'un mot déjà calculer et gagner en optimisation
+            if mot not in dic_mot_tf:  # Afin de ne recalculer l'occ d'un mot déjà calculer et gagner en optimisation
                 for mot2 in mot_par_fichiers_dic[fichier]:
                     if mot == mot2:
                         occ += 1
@@ -221,20 +221,12 @@ def least_important_w(r):
     list_least_imp = []
     dic_idf_mot = idf_mots(r)
     for mot in dic_idf_mot:
-        if dic_idf_mot[mot] == 0.0 :
+        if dic_idf_mot[mot] == 0.0:
             list_least_imp.append(mot)
     dic_tf_files = tf_fichiers(r)
-    for file in dic_tf_files :
+    for file in dic_tf_files:
         for word in dic_tf_files[file]:
-            if word not in list_least_imp and dic_tf_files[file][word] == 0.0 :
+            if word not in list_least_imp and dic_tf_files[file][word] == 0.0:
                 list_least_imp.append(word)
 
-    print(list_least_imp)
-
-
-
-
-
-
-
-
+    return list_least_imp
