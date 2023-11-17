@@ -212,5 +212,29 @@ def tf_fichiers(r):
     return dic
 
 
+def least_important_w(r):
+    """
+    Display the list of least important words in the document corpus
+    :param r: Directory of the document corpus
+    :return: None
+    """
+    list_least_imp = []
+    dic_idf_mot = idf_mots(r)
+    for mot in dic_idf_mot:
+        if dic_idf_mot[mot] == 0.0 :
+            list_least_imp.append(mot)
+    dic_tf_files = tf_fichiers(r)
+    for file in dic_tf_files :
+        for word in dic_tf_files[file]:
+            if word not in list_least_imp and dic_tf_files[file][word] == 0.0 :
+                list_least_imp.append(word)
+
+    print(list_least_imp)
+
+
+
+
+
+
 
 
