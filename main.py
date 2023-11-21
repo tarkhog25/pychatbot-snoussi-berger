@@ -7,7 +7,7 @@ if __name__ == "__main__":
     if rep not in listdir():
         mkdir(rep)
 
-    print(least_important_w(rep))
+    print(matrice_TF_IDF(rep))
 
 
 
