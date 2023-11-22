@@ -167,7 +167,7 @@ def matrice_TF_IDF(r):
     Fonction qui créer la matrice TF-IDF où chaque ligne représente un mot
     et chaque colonne représente un document
     :param r: chaine de caractère représentant le répertoire où les fichiers du corpus sont présent
-    :return: La matrice TF-IDF
+    :return: La matrice TF-IDF.
     """
     fichiers = repertoire_fichiers(r)
     mots_idf = idf_mots(r)
