@@ -7,7 +7,9 @@ if __name__ == "__main__":
     if rep not in listdir():
         mkdir(rep)
 
-    least_important_w(rep)
+    matrix = matrice_TF_IDF(rep)
+
+    print(transpose_matrix(matrix))
 
 
 

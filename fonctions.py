@@ -229,6 +229,22 @@ def least_important_w(r):
     print(list_least_imp)
 
 
+def transpose_matrix(matrix):
+    """
+    Function that compute the transpose of a matrix
+    :param m: The matrix
+    :return: The transpose of the matrix m
+    """
+    rows = len(matrix)
+    columns = len(matrix[0])
+    new_matrix = [[0 for _ in range(rows)] for _ in range(columns)]  # Creation of the new matrix with empty values
+    for i in range(rows):
+        for j in range(columns):
+            new_matrix[j][i] = matrix[i][j]
+
+    return new_matrix
+
+
 
 
 
