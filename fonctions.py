@@ -100,68 +100,20 @@ def occ_mots(c):
             dic[i] = occ
     return dic
 
-
-def idf_mots(r):
-    """
-    Fonction qui calclule le score IDF de chaque mot des fichiers d'un corpus
-    :param r: chaine de caractère représentant le répertoire où les fichiers du corpus sont présent
-    :return: un dictionnaire {mot : score IDF}
-    """
-    idf_dic = {}
-    nb_fichiers = len(repertoire_fichiers(r))  # Récuparation du nombre de fichiers dans le répertoire r
-    mots_fichier_list = mots_fichiers(r)
-    for mot in mots_fichier_list:
-        proportion = 0
-        for liste_mots in mots_par_fichiers(r).values():
-            if mot in liste_mots:
-                proportion += 1
-        idf_dic[mot] = log(nb_fichiers / proportion)  # Calcule de l'IDF du mots à l'aide de la fonction log
-    return idf_dic
-
-
-def mots_par_fichiers(r):
-    """
-    fonction qui récupére chaque mots d'un fichier les mettant dans une liste et les renvoyant
-    sous forme d'un dic
-    :param r: chaine de caractère représentant le répertoire où les fichiers du corpus sont présent
-    :return: un dictionnaire {  fichier : [tous les mots du fichiers sous forme de liste] }
-    """
-
-    fichiers = repertoire_fichiers(r)
-    # Récupération des noms de chaque fichiers dans le répertoire r
-
-    dic = {}
-
-    for fichier in fichiers:  # Pour chaque fichier dans le répertoire
-        with open(f"{r}/{fichier}", "r") as f1:
-            mots = []
-            contenues = f1.readlines()
-            for ligne in contenues:
-                mots = mots + ligne.split()
-            dic[fichier] = mots
-
-    return dic
-
-
-def mots_fichiers(r):
-    """
-    fonction qui récupére chaque mots de tous les fichiers présent dans le répertoire,
-    il récupére une fois chaque mots !!
-    :param r: chaine de caractère représentant le répertoire où les fichiers du corpus sont présent
-    :return: une liste contenant tous les mots UNIQUES (sans doublons) présent dans tous les fichiers
-    """
-    fichiers = repertoire_fichiers(r)
-    # Récupération des fichiers dans le répertoire r
-    mots = []
-    for fichier in fichiers:
-        with open(f"{r}/{fichier}", "r") as f1:
-            contenues = f1.readlines()
-        for ligne in contenues:
-            for mot in ligne.split():  # séparation de chaque mots à l'aide de la method .split()
-                if mot not in mots:
-                    mots.append(mot)
-    return mots
-
+def idf_mots(repertory):
+    dic={}
+    nb_doc = len(repertoire_fichiers(repertory))
+    for i in repertoire_fichiers(repertory):
+        with open(f"{repertory}/{i}",'r') as F:
+            L=set(F.read().split())
+        for i in L:
+            if i not in dic.keys():
+                dic[i]=1
+            else:
+                dic[i]+=1
+    for i in dic:
+        dic[i]=log(nb_doc/dic[i])
+    return(dic)
 
 def matrice_TF_IDF(r):
     """
@@ -205,3 +157,39 @@ def transpose_matrix(matrix):
             new_matrix[j][i] = matrix[i][j]
 
     return new_matrix
+
+
+def TF_IDF(repertory, show=False):
+    '''
+    :param repertory: string(the path to the directory)
+    :return: matrix (TF_IDF matrix)
+    '''
+    D_word_IDF = idf_mots(repertory)
+    dico = {}
+    for words in D_word_IDF.keys():
+        dico[words]=[]
+    for files in repertoire_fichiers(repertory):
+        with open((repertory+'/'+files),'r') as file:
+            string = file.read()
+            D_word_TF = occ_mots(string)
+        for words in D_word_IDF.keys():
+            if words in D_word_TF.keys():
+                dico[words].append(D_word_TF[words]*D_word_IDF[words])
+            else:
+                dico[words].append(0)
+    if show:
+        show_display(dico)
+    return(dico)
+
+def show_display(dic):
+    '''
+    function that display a dic of the form (word  :  [........]
+                                             word2 :  [........]
+                                             ...................)
+    :param dic: a dictionary of the form (key : value .....)
+    :return: none just a diplay
+    '''
+    maxi = max([len(i) for i in dic.keys()])
+    for i in dic.keys():
+        print(i,' '*(maxi-len(i)),':',' ',dic[i])
+

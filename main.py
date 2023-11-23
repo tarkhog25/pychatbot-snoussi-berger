@@ -7,9 +7,7 @@ if __name__ == "__main__":
     if rep not in listdir():
         mkdir(rep)
 
-    matrix = matrice_TF_IDF(rep)
-
-    print(matrix)
+    TF_IDF(rep,True)
 
 
 
