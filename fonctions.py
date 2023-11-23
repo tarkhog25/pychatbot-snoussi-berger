@@ -109,7 +109,8 @@ def idf_mots(r):
     """
     idf_dic = {}
     nb_fichiers = len(repertoire_fichiers(r))  # Récuparation du nombre de fichiers dans le répertoire r
-    for mot in mots_fichiers(r):
+    mots_fichier_list = mots_fichiers(r)
+    for mot in mots_fichier_list:
         proportion = 0
         for liste_mots in mots_par_fichiers(r).values():
             if mot in liste_mots:
@@ -173,60 +174,21 @@ def matrice_TF_IDF(r):
     mots_idf = idf_mots(r)
     matrix = []
     for fichier in fichiers:
-        tf = tf_fichiers(r)[fichier]
+        with open(f"{r}/{fichier}", "r") as f1:
+            contenue = f1.read()
+        tf = occ_mots(contenue)
         tf_idf_fichiers = []
         for mot in mots_idf:
             if mot in tf:
                 if mots_idf[mot] or tf[mot]:
-                    tf_idf_fichiers.append(tf[mot] * mots_idf[mot] )
+                    tf_idf_fichiers.append(tf[mot] * mots_idf[mot])
                 else:
                     tf_idf_fichiers.append(0.0)
             else:
                 tf_idf_fichiers.append(0.0)
         matrix.append(tf_idf_fichiers)
-    return matrix
 
-
-def tf_fichiers(r):
-    """
-    Fonction qui calcule l'idf de chaque mot dans chaque fichiers
-    :param r: chaine de caractère représentant le répertoire où les fichiers du corpus sont présent
-    :return: dictionnaire { fichier : { mot : tf } }
-    """
-    dic = {}
-    mot_par_fichiers_dic = mots_par_fichiers(r)
-    for fichier in mot_par_fichiers_dic:
-        dic_mot_tf = {}
-        for mot in mot_par_fichiers_dic[fichier]:
-            occ = 0
-            if mot not in dic_mot_tf: #Afin de ne recalculer l'occ d'un mot déjà calculer et gagner en optimisation
-                for mot2 in mot_par_fichiers_dic[fichier]:
-                    if mot == mot2:
-                        occ += 1
-                dic_mot_tf[mot] = occ
-        dic[fichier] = dic_mot_tf
-
-    return dic
-
-
-def least_important_w(r):
-    """
-    Display the list of least important words in the document corpus
-    :param r: Directory of the document corpus
-    :return: None
-    """
-    list_least_imp = []
-    dic_idf_mot = idf_mots(r)
-    for mot in dic_idf_mot:
-        if dic_idf_mot[mot] == 0.0 :
-            list_least_imp.append(mot)
-    dic_tf_files = tf_fichiers(r)
-    for file in dic_tf_files :
-        for word in dic_tf_files[file]:
-            if word not in list_least_imp and dic_tf_files[file][word] == 0.0 :
-                list_least_imp.append(word)
-
-    print(list_least_imp)
+    return transpose_matrix(matrix)  # To have the matrix which a row is a word and a column is a file
 
 
 def transpose_matrix(matrix):
@@ -243,11 +205,3 @@ def transpose_matrix(matrix):
             new_matrix[j][i] = matrix[i][j]
 
     return new_matrix
-
-
-
-
-
-
-
-

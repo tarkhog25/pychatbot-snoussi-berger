@@ -9,7 +9,7 @@ if __name__ == "__main__":
 
     matrix = matrice_TF_IDF(rep)
 
-    print(transpose_matrix(matrix))
+    print(matrix)
 
 
 
