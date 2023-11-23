@@ -164,29 +164,26 @@ def mots_fichiers(r):
 
 def matrice_TF_IDF(r):
     """
-    Fonction qui créer la matrice TF-IDF où chaque ligne représente un mot
-    et chaque colonne représente un document
+    Fonction qui créer la matrice TF-IDF où chaque ligne représente un mot
+    et chaque colonne représente un document
     :param r: chaine de caractère représentant le répertoire où les fichiers du corpus sont présent
-    :return: La matrice TF-IDF
+    :return: La matrice TF-IDF.
     """
     fichiers = repertoire_fichiers(r)
-    mots = mots_fichiers(r)
+    mots_idf = idf_mots(r)
     matrix = []
-    for mot in mots:
-        idf = idf_mots(r)[mot]
+    for fichier in fichiers:
+        tf = tf_fichiers(r)[fichier]
         tf_idf_fichiers = []
-        if idf:
-            for fichier in fichiers:
-                if mot in tf_fichiers(r)[fichier].keys():
-                    tf = tf_fichiers(r)[fichier][mot]
-                    tf_idf_fichiers.append(idf*tf)
+        for mot in mots_idf:
+            if mot in tf:
+                if mots_idf[mot] or tf[mot]:
+                    tf_idf_fichiers.append(tf[mot] * mots_idf[mot] )
                 else:
                     tf_idf_fichiers.append(0.0)
-        else:
-            for i in fichiers:
+            else:
                 tf_idf_fichiers.append(0.0)
         matrix.append(tf_idf_fichiers)
-
     return matrix
 
 
