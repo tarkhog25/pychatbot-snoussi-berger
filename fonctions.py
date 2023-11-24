@@ -205,6 +205,7 @@ def least_important_word(rep,recup=False,show=True):
     """
     list_lest_imp_word = []
     dic_idf_mots = idf_mots(rep)
+    # I just need to check if idf = 0 to find if the score TF-IDF of a word is 0 in all files
     for word in dic_idf_mots:
         if dic_idf_mots[word] == 0.0:
             list_lest_imp_word.append(word)
