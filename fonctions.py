@@ -194,12 +194,13 @@ def show_display(dic):
         print(i,' '*(maxi-len(i)),':',' ',dic[i])
 
 
-def most_higher(dico):
+def most_higher(rep):
     '''
     function that return the most higher word
     :param dic: dic of TF IDF
     :return: dico
     '''
+    dico = TF_IDF(rep)
     dic = dico.copy()
     big = [max(i) for i in dic.values()]
     n=int(input("Enter the number of word that you want : "))
