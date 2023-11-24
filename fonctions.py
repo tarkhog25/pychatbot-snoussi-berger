@@ -17,7 +17,6 @@ def repertoire_fichiers(r):
     return [f for f in listdir(f"{r}")]
     # liste en compréhension qui s'occupe de prendre chaque element du répertoire r
 
-
 def exctraction_nom(f):
     """
 
@@ -39,8 +38,9 @@ def exctraction_nom(f):
 def association_name(f):
     List = exctraction_nom(f)
     L_aux = ["Emanuel","Jack","Valéry","François","Nicolas"]
+    dic = {}
     for i in range(len(List)):
-        if List[i]=="Macron":
+        if List[i]=="Macron" :
             List[i] = L_aux[0]+' '+List[i]
 
         elif List[i]=="Chirac":
@@ -54,8 +54,19 @@ def association_name(f):
 
         else:
             List[i] = L_aux[3]+' '+List[i]
-
-    return(List)
+    for i in List:
+        for j in f:
+            if i[-6:] in j:
+                dic[j]=i
+            elif i[-6:] in j:
+                dic[j]=i
+            elif i[-15:] in j:
+                dic[j]=i
+            elif i[-7:] in j:
+                dic[j]=i
+            elif i[-8:] in j:
+                dic[j]=i
+    return(dic)
 
 def conversion_mini(f):
     """
@@ -257,3 +268,22 @@ def least_important_word(rep,recup=False,show=True):
         return list_lest_imp_word
     elif not show and recup:
         return list_lest_imp_word
+
+def president_word(rep):
+    List_name = association_name(repertoire_fichiers(rep))
+    word = input("Enter the word that president sayed : ")
+    dic = TF_IDF(rep)
+    List = dic[word]
+    fichiers= repertoire_fichiers(rep)
+
+    if List == [0] * len(List):
+        print("all the president in the repertory sayed it !")
+        for i in List_name:
+            print(i)
+    else:
+        for i in range(len(fichiers)):
+            if List[i]!=0:
+                print(fichiers[i]," sayed ",word)
+
+    index_1= List.index(max(List))
+    print("The president that sayed the most ", word, " is ", fichiers[index_1])
