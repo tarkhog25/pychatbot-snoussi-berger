@@ -71,7 +71,7 @@ def clean_fichier(f):
             for caractere in ligne:
                 if caractere in "'-":
                     new_ligne += " "
-                elif caractere not in ',;!.?:"':
+                elif caractere not in ',;!.?:"_':
                     new_ligne += caractere
             fichier.write(new_ligne)
         fichier.close()
