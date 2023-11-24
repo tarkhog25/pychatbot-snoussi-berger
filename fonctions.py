@@ -193,3 +193,29 @@ def show_display(dic):
     for i in dic.keys():
         print(i,' '*(maxi-len(i)),':',' ',dic[i])
 
+
+
+def least_important_word(rep,recup=False,show=True):
+    """
+    Display the list of least important words in the document corpus
+    :param rep: repository
+    :param recup: if we return the list or not
+    :param show: if we show the list or not
+    :return: By default None, if recup is true --> return the list
+    """
+    list_lest_imp_word = []
+    dic_idf_mots = idf_mots(rep)
+    # I just need to check if idf = 0 to find if the score TF-IDF of a word is 0 in all files
+    for word in dic_idf_mots:
+        if dic_idf_mots[word] == 0.0:
+            list_lest_imp_word.append(word)
+
+    if show and not recup:
+        print(list_lest_imp_word)
+    elif show and recup:
+        print(list_lest_imp_word)
+        return list_lest_imp_word
+    elif not show and recup:
+        return list_lest_imp_word
+
+
