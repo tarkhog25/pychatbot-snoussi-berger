@@ -269,21 +269,3 @@ def least_important_word(rep,recup=False,show=True):
     elif not show and recup:
         return list_lest_imp_word
 
-def president_word(rep):
-    List_name = association_name(repertoire_fichiers(rep))
-    word = input("Enter the word that president sayed : ")
-    dic = TF_IDF(rep)
-    List = dic[word]
-    fichiers= repertoire_fichiers(rep)
-
-    if List == [0] * len(List):
-        print("all the president in the repertory sayed it !")
-        for i in List_name:
-            print(i)
-    else:
-        for i in range(len(fichiers)):
-            if List[i]!=0:
-                print(fichiers[i]," sayed ",word)
-
-    index_1= List.index(max(List))
-    print("The president that sayed the most ", word, " is ", fichiers[index_1])
