@@ -36,6 +36,26 @@ def exctraction_nom(f):
             nom_president.append(president)
     return nom_president
 
+def association_name(f):
+    List = exctraction_nom(f)
+    L_aux = ["Emanuel","Jack","Valéry","François","Nicolas"]
+    for i in range(len(List)):
+        if List[i]=="Macron":
+            List[i] = L_aux[0]+' '+List[i]
+
+        elif List[i]=="Chirac":
+            List[i] = L_aux[1]+' '+List[i]
+
+        elif List[i]=="Giscard dEstaing":
+            List[i] = L_aux[2]+' '+List[i]
+
+        elif List[i]=="Sarkozy":
+            List[i] = L_aux[4]+' '+List[i]
+
+        else:
+            List[i] = L_aux[3]+' '+List[i]
+
+    return(List)
 
 def conversion_mini(f):
     """
@@ -237,7 +257,3 @@ def least_important_word(rep,recup=False,show=True):
         return list_lest_imp_word
     elif not show and recup:
         return list_lest_imp_word
-
-
-
-   
