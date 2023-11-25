@@ -270,6 +270,12 @@ def least_important_word(rep,recup=False,show=True):
         return list_lest_imp_word
 
 def president_word(rep):
+    '''
+    functinality that alow the user to enter a word and know all the president
+    that sayed the word and also the president that sayed it the most
+    :param rep: repertory of files
+    :return: none ( only print())
+    '''
     List_name = association_name(repertoire_fichiers(rep))
     word = input("Enter the word that president sayed : ")
     List = TF_IDF(rep)[word]
