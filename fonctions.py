@@ -239,5 +239,56 @@ def least_important_word(rep,recup=False,show=True):
         return list_lest_imp_word
 
 
+def most_repeated_word(rep,show=False):
+    """
+    Display the most repeated word of a prsident
+    :param rep: repository
+    :param show: Choose if only want to display the most repeated word(s) or only returning the list of them (by default)
+    :return: By default : the list of the most repeated word(s) by a President ; if show True : None
+    """
+    president = input("Enter the name of the president : ").lower()
+    files = [file.lower() for file in repertoire_fichiers(rep)]
+    # Taking all name of iles (in lower case to make easy the check)
+    names = [name.lower() for name in exctraction_nom(files)]
+    # Taking all name of president in files (in lower case to make easy the check)
 
-   
+    while president not in names: # Verify if the word is present
+        print("There isn't this president ")
+        president = input("Enter the name of the president : ").lower()
+
+    nb_words = int(input("How many words you want to see ? : ")) # display nb_words most repeated
+    while nb_words <= 0:
+        nb_words = int(input("Enter a positive non zero number : "))
+
+    word_most_repeated = []
+
+    for file in files:
+        if president in file:
+            # Check if the name of file corresponding to the president because some president has 2 files
+            with open(f"{rep}/{file}", "r") as f1:
+                contenue = f1.read()
+            dic_occ_word = occ_mots(contenue)
+            max = 0
+            word_max = ""
+            for word in dic_occ_word:
+                if dic_occ_word[word] > max and word not in word :
+                    max = dic_occ_word[word]
+                    word_max = word
+            word_most_repeated.append(word_max)
+
+    if show:
+        print("\n")
+        print("="*50, "\n")
+        print(f"The most repeated words of {president} : ", "\n")
+        for word in word_most_repeated[nb_words:]:
+            print(word,end=" ; ")
+        print("\n")
+        print("=" * 50)
+    else:
+        return word_most_repeated
+
+
+
+
+
+
