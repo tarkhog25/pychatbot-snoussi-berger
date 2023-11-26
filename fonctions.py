@@ -357,18 +357,21 @@ def president_word(rep):
     '''
     List_name = association_name(repertoire_fichiers(rep))
     word = input("Enter the word that president sayed : ")
-    List = TF_IDF(rep)[word]
-    fichiers = repertoire_fichiers(rep)
-    seto = set()
-    if List == [0] * len(List):
-        print("all the president in the repertory sayed it !")
-        seto = set(List_name.values())
+    if word in TF_IDF() :
+        List = TF_IDF(rep)[word]
+        fichiers = repertoire_fichiers(rep)
+        seto = set()
+        if List == [0] * len(List):
+            print("all the president in the repertory sayed it !")
+            seto = set(List_name.values())
+        else:
+            for i in range(len(fichiers)):
+                if List[i] != 0:
+                    seto.add(List_name[fichiers[i]])
+        for i in seto:
+            print(i, " sayed ", word)
+        index_1 = List.index(max(List))
+        print("The president that sayed the most ", word, " is ", List_name[fichiers[index_1]])
     else:
-        for i in range(len(fichiers)):
-            if List[i] != 0:
-                seto.add(List_name[fichiers[i]])
-    for i in seto:
-        print(i, " sayed ", word)
-    index_1 = List.index(max(List))
-    print("The president that sayed the most ", word, " is ", List_name[fichiers[index_1]])
+        print(f"No one talked about {word} ")
 
