@@ -17,7 +17,6 @@ def repertoire_fichiers(r):
     return [f for f in listdir(f"{r}")]
     # liste en compréhension qui s'occupe de prendre chaque element du répertoire r
 
-
 def exctraction_nom(f):
     """
 
@@ -36,6 +35,38 @@ def exctraction_nom(f):
             nom_president.append(president)
     return nom_president
 
+def association_name(f):
+    List = exctraction_nom(f)
+    L_aux = ["Emanuel","Jack","Valéry","François","Nicolas"]
+    dic = {}
+    for i in range(len(List)):
+        if List[i]=="Macron" :
+            List[i] = L_aux[0]+' '+List[i]
+
+        elif List[i]=="Chirac":
+            List[i] = L_aux[1]+' '+List[i]
+
+        elif List[i]=="Giscard dEstaing":
+            List[i] = L_aux[2]+' '+List[i]
+
+        elif List[i]=="Sarkozy":
+            List[i] = L_aux[4]+' '+List[i]
+
+        else:
+            List[i] = L_aux[3]+' '+List[i]
+    for i in List:
+        for j in f:
+            if i[-6:] in j:
+                dic[j]=i
+            elif i[-6:] in j:
+                dic[j]=i
+            elif i[-15:] in j:
+                dic[j]=i
+            elif i[-7:] in j:
+                dic[j]=i
+            elif i[-8:] in j:
+                dic[j]=i
+    return(dic)
 
 def conversion_mini(f):
     """
@@ -239,6 +270,7 @@ def least_important_word(rep,recup=False,show=True):
         return list_lest_imp_word
 
 
+
 def most_repeated_word(rep, show=False, min_letter=2):
     """
     Display the most repeated word of a prsident
@@ -316,11 +348,27 @@ def maxi_keys_dic(dic):
     return L
 
 
-
-
-
-
-
-
-
+def president_word(rep):
+    '''
+    functinality that alow the user to enter a word and know all the president
+    that sayed the word and also the president that sayed it the most
+    :param rep: repertory of files
+    :return: none ( only print())
+    '''
+    List_name = association_name(repertoire_fichiers(rep))
+    word = input("Enter the word that president sayed : ")
+    List = TF_IDF(rep)[word]
+    fichiers = repertoire_fichiers(rep)
+    seto = set()
+    if List == [0] * len(List):
+        print("all the president in the repertory sayed it !")
+        seto = set(List_name.values())
+    else:
+        for i in range(len(fichiers)):
+            if List[i] != 0:
+                seto.add(List_name[fichiers[i]])
+    for i in seto:
+        print(i, " sayed ", word)
+    index_1 = List.index(max(List))
+    print("The president that sayed the most ", word, " is ", List_name[fichiers[index_1]])
 
