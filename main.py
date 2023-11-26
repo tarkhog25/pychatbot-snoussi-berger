@@ -8,7 +8,8 @@ if __name__ == "__main__":
     rep = "cleaned"
     if rep not in listdir():
         mkdir(rep)
-        conversion_mini(repertoire_fichiers("speeches"))
+        fichiers = repertoire_fichiers("speeches")
+        conversion_mini(fichiers)
         clean_fichier(repertoire_fichiers(rep))
 
     menu_choice = int(input("Do you want a graphic menu ? or console menu ? \n0 for console menu  \n1 for graphic menu \n"))
