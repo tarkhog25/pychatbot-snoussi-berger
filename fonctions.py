@@ -1,7 +1,7 @@
 #################################################################
 
 # Importation des modules nécessaires pour certaines fonctions
-from math import log
+from math import log10
 from os import listdir
 
 
@@ -159,7 +159,7 @@ def idf_mots(rep):
             else:
                 dic[i] += 1
     for i in dic:
-        dic[i] = log(nb_doc / dic[i], base=10)
+        dic[i] = log10(nb_doc / dic[i])
     return (dic)
 
 
