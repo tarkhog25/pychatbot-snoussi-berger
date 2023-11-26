@@ -7,7 +7,11 @@ if __name__ == "__main__":
     if rep not in listdir():
         mkdir(rep)
 
-    TF_IDF(rep,True)
+    menu(rep)
+
+
+
+
 
 
 

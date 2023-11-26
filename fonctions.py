@@ -180,12 +180,12 @@ def matrice_TF_IDF(r):
 def transpose_matrix(matrix):
     """
     Function that compute the transpose of a matrix
-    :param m: The matrix
-    :return: The transpose of the matrix m
+    :param matrix: The matrix
+    :return: The transpose of the matrix
     """
     rows = len(matrix)
     columns = len(matrix[0])
-    new_matrix = [[0 for _ in range(rows)] for _ in range(columns)]  # Creation of the new matrix with empty values
+    new_matrix = [[0 for i in range(rows)] for i in range(columns)]  # Creation of the new matrix with empty values
     for i in range(rows):
         for j in range(columns):
             new_matrix[j][i] = matrix[i][j]
@@ -234,19 +234,19 @@ def show_display(dic):
 
 def higher_word(rep):
     '''
-    function that return the higher word
-    :param dic: dic of TF IDF
+    function that display words with the highest TF-IDF
+    :param rep: repository
     :return: None
     '''
     dico = TF_IDF(rep)
     dic = dico.copy()
     big = [max(i) for i in dic.values()]
-    n=int(input("Enter the number of word that you want : "))
+    n = int(input("Enter the number of word that you want : "))
     for i in range(n):
-        M=[]
+        M = []
         for j in dic:
             if max(big) in dic[j]:
-                print(j," : ",dic[j])
+                print(j, " : ", dic[j])
                 M.append(j)
         big.remove(max(big))
         for i in M:
@@ -335,25 +335,25 @@ def maxi_keys_dic(dic):
     :param dic: dictionnary with integer values
     :return: sorted list (from the highest to the smallest)
     """
-    L = []
-    d = dic
+    sorted_list = []
+    new_dic = dic
 
-    for j in range(len(d)):
-        maxi_val = [i for i in d.values()][0] # Récupération d'une valeur dans le dic
-        maxi_key = [i for i in d.keys()][0] # Récupération d'une valeur dans le dic
-        for i in d:
-            if d[i] > maxi_val:
-                maxi_val = d[i]
+    for j in range(len(new_dic)):
+        maxi_val = [i for i in new_dic.values()][0] # Récupération d'une valeur dans le dic
+        maxi_key = [i for i in new_dic.keys()][0] # Récupération d'une valeur dans le dic
+        for i in new_dic:
+            if new_dic[i] > maxi_val:
+                maxi_val = new_dic[i]
                 maxi_key = i
-        L.append(maxi_key)
-        del d[maxi_key]
+        sorted_list.append(maxi_key)
+        del new_dic[maxi_key]
 
-    return L
+    return sorted_list
 
 def president_word(rep):
     '''
     functinality that alow the user to enter a word and know all the president
-    that sayed the word and also the president that sayed it the most
+    that said the word and also the president that said it the most
     :param rep: repertory of files
     :return: none ( only display )
     '''
@@ -379,7 +379,7 @@ def president_word(rep):
 
 def mention_all(rep, max_occ = 3, min_letter = 6):
     '''
-    functionlity that display all the important word that presidents sayed
+    functionlity that display all the important word that presidents said
     :param rep: repertory of files
     :param max_occ: integer of the number of maximum occurency that the user allow
     :param min_letter: integer of the minimum number of letter that the user allow
@@ -405,7 +405,7 @@ def mention_all(rep, max_occ = 3, min_letter = 6):
                 valid += 1
         if valid <= max_occ and len(i) >= min_letter:
             List_word.append(i)
-    print("The word(s) that all presidents mention is/are : ")
+    print("The word(s) that all presidents mention : ")
     for i in List_word:
         print(i)
 
@@ -436,3 +436,91 @@ def first_president(rep, nb_words=1):
         if not word_find:
             print(f"No one talked about '{word}'\n")
 
+
+#######################  Menu  #########################
+
+def menu(rep):
+    """
+    Propose a menu for the user
+    :param rep: repository
+    :return: None
+    """
+    while True:
+        print("=" * 50)
+        print("1) Matrix")
+        print("2) Features")
+        print("3) Exit")
+        print("=" * 50)
+
+        choice_1 = int(input("Enter a choice : "))
+
+        if choice_1 == 1:
+            print("=" * 50)
+            print("1) Display The Matrix TF-IDF ")
+            print("2) Display The Matrix TF-IDF word by word ")
+            print("3) Back")
+            print("=" * 50)
+
+            choice_2 = int(input("Enter a choice : "))
+            while not (0 < choice_2 <= 3):
+                print("Invalid choice try again ")
+                choice_2 = int(input("Enter a choice : "))
+
+            if choice_2 == 1:
+                print(matrice_TF_IDF(rep))
+            elif choice_2 == 2:
+                TF_IDF(rep,show=True)
+
+        elif choice_1 == 2:
+            print("=" * 50)
+            print("1) Display The list of least important words in the document corpus ")
+            print("2) Display the word(s) with the highest TD-IDF score ")
+            print("3) Display the most repeated word(s) by a President ")
+            print("4) Display the president that spoke about a word and the one who repeated it the most times ")
+            print("5) Display the first president who talk about some words ")
+            print("6) Displat words that all president mention ")
+            print("7) Back")
+            print("=" * 50)
+
+            choice_3 = int(input("Enter a choice : "))
+            while not (0 < choice_3 <= 7):
+                print("Invalid choice try again ")
+                choice_3 = int(input("Enter a choice : "))
+
+            if choice_3 == 1:
+                least_important_word(rep)
+            elif choice_3 == 2:
+                higher_word(rep)
+            elif choice_3 == 3:
+                mini_letter = int(input("What is the minimum of letter of word that you want to display ? : "))
+                while mini_letter <= 1:
+                    print("Enter a positive value that is superior of 1 !! ")
+                    mini_letter = int(input("What is the minimum of letter of word that you want to display ? : "))
+
+                most_repeated_word(rep, min_letter=mini_letter)
+            elif choice_3 == 4:
+                president_word(rep)
+            elif choice_3 == 5:
+                nb_word = int(input("How many words you want to display ? : "))
+                while nb_word <= 0:
+                    print("Enter a positive non zeo value !!")
+                    nb_word = int(input("How many words you want to display ? : "))
+
+                first_president(rep)
+            elif choice_3 == 6:
+                mini_letter = int(input("What is the minimum of letter of word that you want to display ? : "))
+                while mini_letter <= 1:
+                    print("Enter a positive value that is superior of 1 !! ")
+                    mini_letter = int(input("What is the minimum of letter of word that you want to display ? : "))
+                nb_word = int(input("How many words you want to display ? : "))
+                while nb_word <= 0:
+                    print("Enter a positive non zeo value !!")
+                    nb_word = int(input("How many words you want to display ? : "))
+
+                mention_all(rep,max_occ=nb_word,min_letter=mini_letter)
+
+        elif choice_1 == 3:
+            break
+
+        else:
+            print("Invalid Option. Try Again !")
