@@ -159,7 +159,7 @@ def idf_mots(rep):
             else:
                 dic[i] += 1
     for i in dic:
-        dic[i] = log(nb_doc / dic[i])
+        dic[i] = log(nb_doc / dic[i], base=10)
     return (dic)
 
 
