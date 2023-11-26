@@ -5,7 +5,7 @@ from math import log
 from os import listdir
 
 
-#############################     files functions     ####################################
+#############################     Basic Functions     ####################################
 
 
 
@@ -112,7 +112,7 @@ def clean_fichier(f):
 
 
 
-#############################      all functions needed for TF IDF        ####################################
+#############################      TF_IDF Functions      ####################################
 
 
 
@@ -228,13 +228,13 @@ def show_display(dic):
 
 
 
-#######################      Fonctionality      #########################
+#######################      Features      #########################
 
 
 
 def most_higher(rep):
     '''
-    function that return the most higher word
+    function that return the higher word
     :param dic: dic of TF IDF
     :return: None
     '''
