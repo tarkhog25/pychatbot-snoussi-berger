@@ -239,9 +239,10 @@ def least_important_word(rep,recup=False,show=True):
         return list_lest_imp_word
 
 
-def most_repeated_word(rep, show=False):
+def most_repeated_word(rep, show=False, min_letter=2):
     """
     Display the most repeated word of a prsident
+    :param min_letter: The minimum of letter of words to display (by default 2)
     :param rep: repository
     :param show: Choose if only want to display the most repeated word(s) or only returning the list of them (by default)
     :return: By default : the list of the most repeated word(s) by a President ; if show True : None
@@ -280,8 +281,13 @@ def most_repeated_word(rep, show=False):
     if show:
         print("="*50)
         print(f"The {nb_words} most repeated words of {president} : ", "\n")
-        for word in word_most_repeated[:nb_words]: # To have only the nb_words most repeated words
-            print(word, end=" ; ")
+        cpt = 1
+        for word in word_most_repeated: # To have only the nb_words most repeated words
+            if len(word) >= min_letter and cpt <= nb_words:
+                print(word, end=" ; ")
+                cpt += 1
+            elif cpt > nb_words:
+                break # No need to go further, all needed words were display
         print("\n")
         print("=" * 50)
     else:
