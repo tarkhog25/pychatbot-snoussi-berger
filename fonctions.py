@@ -517,16 +517,7 @@ def menu(rep):
 
                 first_president(rep)
             elif choice_3 == 6:
-                mini_letter = int(input("What is the minimum of letter of word that you want to display ? : "))
-                while mini_letter <= 1:
-                    print("Enter a positive value that is superior of 1 !! ")
-                    mini_letter = int(input("What is the minimum of letter of word that you want to display ? : "))
-                nb_word = int(input("How many words you want to display ? : "))
-                while nb_word <= 0:
-                    print("Enter a positive non zeo value !!")
-                    nb_word = int(input("How many words you want to display ? : "))
-
-                mention_all(rep,max_occ=nb_word,min_letter=mini_letter)
+                mention_all(rep)
 
         elif choice_1 == 3:
             break
