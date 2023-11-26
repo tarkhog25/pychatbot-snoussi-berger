@@ -549,9 +549,6 @@ def menu(rep):
             print("Invalid Option. Try Again !")
 
 
-
-
-
 def graphic_menu(rep):
     # Creation of the window
     window = Tk()
@@ -704,18 +701,18 @@ def graphic_menu(rep):
 
         elif button_nb == 3:
             text.delete(1.0, END)
-            text.insert(END, "Not Working Yet !! (sorry)")
-            # For this one i have some issues so it will not working yet
+            text.insert(END, "Not Working Yet !! (sorry) (for the graphic menu, the console menu is working perfectly)")
+            # For this one i have some issues so it will not working yet (for the graphic menu, the console menu is working perfectly)
 
         elif button_nb == 4:
             text.delete(1.0, END)
-            text.insert(END, "Not Working Yet !! (sorry)")
-            # For this one i have some issues so it will not working yet
+            text.insert(END, "Not Working Yet !! (sorry) (for the graphic menu, the console menu is working perfectly)")
+            # For this one i have some issues so it will not working yet (for the graphic menu, the console menu is working perfectly)
 
         elif button_nb == 5:
             text.delete(1.0, END)
-            text.insert(END, "Not Working Yet !! (sorry)")
-            # For this one i have some issues so it will not working yet
+            text.insert(END, "Not Working Yet !! (sorry) (for the graphic menu, the console menu is working perfectly) ")
+            # For this one i have some issues so it will not working yet (for the graphic menu, the console menu is working perfectly
 
         elif button_nb == 6:
             text.delete(1.0, END)
