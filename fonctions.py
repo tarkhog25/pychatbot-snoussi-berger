@@ -39,35 +39,35 @@ def exctraction_nom(f):
 
 def association_name(f):
     List = exctraction_nom(f)
-    L_aux = ["Emanuel","Jack","Valéry","François","Nicolas"]
+    L_aux = ["Emanuel","Jack","Valéry","François","Nicolas",""]
     dic = {}
+
     for i in range(len(List)):
         if List[i]=="Macron" :
-            List[i] = L_aux[0]+' '+List[i]
+            L_aux[0] = L_aux[0]+' '+List[i]
 
         elif List[i]=="Chirac":
-            List[i] = L_aux[1]+' '+List[i]
+            L_aux[1] = L_aux[1]+' '+List[i]
 
         elif List[i]=="Giscard dEstaing":
-            List[i] = L_aux[2]+' '+List[i]
+            L_aux[2] = L_aux[2]+' '+List[i]
 
         elif List[i]=="Sarkozy":
-            List[i] = L_aux[4]+' '+List[i]
+            L_aux[4] = L_aux[4]+' '+List[i]
 
-        else:
-            List[i] = L_aux[3]+' '+List[i]
-    for i in List:
-        for j in f:
-            if i[-6:] in j:
-                dic[j]=i
-            elif i[-6:] in j:
-                dic[j]=i
-            elif i[-15:] in j:
-                dic[j]=i
-            elif i[-7:] in j:
-                dic[j]=i
-            elif i[-8:] in j:
-                dic[j]=i
+        elif List[i]=="Hollande":
+            L_aux[3] = L_aux[3]+' '+List[i]
+
+        elif List[i]=="Mitterrand":
+            L_aux[5] =L_aux[3] + ' ' + List[i]
+
+    for i in L_aux:
+        dic[i]=[]
+    for name in List:
+        for file in f:
+            for name_m in L_aux:
+                if name in file and name in name_m:
+                    dic[name_m].append(file)
     return(dic)
 
 def conversion_mini(f):
@@ -359,21 +359,30 @@ def president_word(rep):
     '''
     List_name = association_name(repertoire_fichiers(rep))
     word = input("Enter the word that president talk about : ")
-    if word in TF_IDF(rep) :
-        List = TF_IDF(rep)[word]
+    if word.lower() in TF_IDF(rep) :
+        List = TF_IDF(rep)[word.lower()]
         fichiers = repertoire_fichiers(rep)
         seto = set()
+        for name in List_name:
+            n=0
+            for file in List_name[name]:
+                n += List[fichiers.index(file)]
+            List_name[name] = n
+
         if List == [0] * len(List):
-            print("all the president in the repertory sayed it !")
-            seto = set(List_name.values())
+            print("all the president in the repertory said it !")
+            seto = List_name
         else:
-            for i in range(len(fichiers)):
-                if List[i] != 0:
-                    seto.add(List_name[fichiers[i]])
+            for i in List_name:
+                if List_name[i]!=0:
+                    seto.add(i)
+
+        maximum = max(List_name.values())
         for i in seto:
-            print(i, " sayed ", word)
-        index_1 = List.index(max(List))
-        print("The president that sayed the most ", word, " is ", List_name[fichiers[index_1]])
+            print(i, " said ", word)
+            if List_name[i]==maximum:
+                winner = i
+        print("The president that said the most ", word, " is ", winner)
     else:
         print(f"No one talked about {word} ")
 
