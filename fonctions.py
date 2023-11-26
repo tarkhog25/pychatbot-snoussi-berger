@@ -281,7 +281,7 @@ def most_repeated_word(rep, show=False, min_letter=2):
     """
     president = input("Enter the name of the president : ").lower()
     files = [file.lower() for file in repertoire_fichiers(rep)]
-    # Taking all name of iles (in lower case to make easy the check)
+    # Taking all name of files (in lower case to make easy the check)
     names = [name.lower() for name in exctraction_nom(files)]
     # Taking all name of president in files (in lower case to make easy the check)
 
@@ -375,3 +375,34 @@ def president_word(rep):
     else:
         print(f"No one talked about {word} ")
 
+def mention_all(rep, max_occ = 3, min_letter = 6):
+    '''
+    functionlity that print all the important word that presidents sayed
+    :param rep: repertory of files
+    :param max_occ: integer of the number of maximum occurency that the user allow
+    :param min_letter: integer of the minimum number of letter that the user allow
+    :return:
+    '''
+    dic = idf_mots(rep)
+    fichiers = repertoire_fichiers(rep)
+    for i in dic.copy():
+        if dic[i] != 0:
+            del dic[i]
+        else:
+            dic[i] = []
+    for file in fichiers:
+        with open(f"cleaned/{file}", 'r') as f1:
+            TF = occ_mots(f1.read())
+        for i in dic:
+            dic[i].append(TF[i])
+    List_word = []
+    for i in dic:
+        valid = 0
+        for j in dic[i]:
+            if j >= 10:
+                valid += 1
+        if valid <= max_occ and len(i) >= min_letter:
+            List_word.append(i)
+    print("The word(s) that all presidents mention is/are : ")
+    for i in List_word:
+        print(i)
