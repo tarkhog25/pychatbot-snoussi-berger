@@ -232,7 +232,7 @@ def show_display(dic):
 
 
 
-def most_higher(rep):
+def higher_word(rep):
     '''
     function that return the higher word
     :param dic: dic of TF IDF
@@ -355,11 +355,11 @@ def president_word(rep):
     functinality that alow the user to enter a word and know all the president
     that sayed the word and also the president that sayed it the most
     :param rep: repertory of files
-    :return: none ( only print())
+    :return: none ( only display )
     '''
     List_name = association_name(repertoire_fichiers(rep))
-    word = input("Enter the word that president sayed : ")
-    if word in TF_IDF() :
+    word = input("Enter the word that president talk about : ")
+    if word in TF_IDF(rep) :
         List = TF_IDF(rep)[word]
         fichiers = repertoire_fichiers(rep)
         seto = set()
@@ -379,7 +379,7 @@ def president_word(rep):
 
 def mention_all(rep, max_occ = 3, min_letter = 6):
     '''
-    functionlity that print all the important word that presidents sayed
+    functionlity that display all the important word that presidents sayed
     :param rep: repertory of files
     :param max_occ: integer of the number of maximum occurency that the user allow
     :param min_letter: integer of the minimum number of letter that the user allow
@@ -408,3 +408,31 @@ def mention_all(rep, max_occ = 3, min_letter = 6):
     print("The word(s) that all presidents mention is/are : ")
     for i in List_word:
         print(i)
+
+
+def first_president(rep, nb_words=1):
+    """
+    Identify the first president to talk about a word
+    :param nb_words: The numbers of words want to know which president said it first
+    :param rep: repository
+    :return: None
+    """
+    words = [input("The word : ") for i in range(nb_words)]
+    ordered_president = ["Giscard", "Mitterrand", "Chirac", "Sarkozy", "Hollande", "Macron"]
+    # List of president from the first one to the last one
+    for word in words:
+        word_find = False  # To check if the word was found and don't repeat useless loop
+        for president in ordered_president:
+            for file in repertoire_fichiers(rep):
+                if president in file:
+                    with open(f"{rep}/{file}", "r") as f1:
+                        contenue = f1.read()
+                    if word in contenue:
+                        print(f"The first president who talked about '{word}' is {president}\n")
+                        word_find = True
+                        break
+            if word_find:
+                break
+        if not word_find:
+            print(f"No one talked about '{word}'\n")
+
