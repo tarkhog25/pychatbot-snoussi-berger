@@ -6,6 +6,8 @@ if __name__ == "__main__":
     rep = "cleaned"
     if rep not in listdir():
         mkdir(rep)
+        conversion_mini(repertoire_fichiers("speeches"))
+        clean_fichier(repertoire_fichiers(rep))
 
     menu(rep)
 
