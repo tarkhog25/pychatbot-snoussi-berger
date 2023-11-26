@@ -8,10 +8,18 @@ INSTRUCTIONS FOR USE :
 - Open and execute the main program 
 
 DEPENDECIES TO INSTALL :
-- Nothing to install 
+- Nothing to install for the console menu
+- Normally it is already installed but if it is not, install tkinter for the graphic menu
 
 LIST OF KNOWN BUGS :
 - No bugs
+- For the graphic menu :
+  Some features are not working (only for the graphic part, but for what instruction asked with a console menu everything is going well !!) :
+    - "Display the most repeated word(s) by a President"
+    - "Display the president that spoke about a word and the one who repeated it the most times"
+    - "Display the first president who talk about some words"
+- For the console menu :
+  - No bugs, everything is perfect 
 
 DIRECT LINK TO OUR PROJECT GIT REPOSITORY :
 - https://github.com/tarkhog25/pychatbot-snoussi-berger
