@@ -1,12 +1,13 @@
 #################################################################
 
 # Importation des modules nécessaires pour certaines fonctions
-from math import log
+from math import log10
 from os import listdir
+from tkinter import *
+from tkinter import scrolledtext
 
 
 #############################     Basic Functions     ####################################
-
 
 
 # Toutes les fonctions de bases
@@ -18,6 +19,7 @@ def repertoire_fichiers(r):
     """
     return [f for f in listdir(f"{r}")]
     # liste en compréhension qui s'occupe de prendre chaque element du répertoire r
+
 
 def exctraction_nom(f):
     """
@@ -37,38 +39,45 @@ def exctraction_nom(f):
             nom_president.append(president)
     return nom_president
 
+
 def association_name(f):
+    """
+    Associate name of the president with their files
+    :param f: All files in the repository
+    :return: dictinnary {name of president : [files]}
+    """
     List = exctraction_nom(f)
-    L_aux = ["Emanuel","Jack","Valéry","François","Nicolas",""]
+    L_aux = ["Emanuel", "Jack", "Valéry", "François", "Nicolas", ""]
     dic = {}
 
     for i in range(len(List)):
-        if List[i]=="Macron" :
-            L_aux[0] = L_aux[0]+' '+List[i]
+        if List[i] == "Macron":
+            L_aux[0] = L_aux[0] + ' ' + List[i]
 
-        elif List[i]=="Chirac":
-            L_aux[1] = L_aux[1]+' '+List[i]
+        elif List[i] == "Chirac":
+            L_aux[1] = L_aux[1] + ' ' + List[i]
 
-        elif List[i]=="Giscard dEstaing":
-            L_aux[2] = L_aux[2]+' '+List[i]
+        elif List[i] == "Giscard dEstaing":
+            L_aux[2] = L_aux[2] + ' ' + List[i]
 
-        elif List[i]=="Sarkozy":
-            L_aux[4] = L_aux[4]+' '+List[i]
+        elif List[i] == "Sarkozy":
+            L_aux[4] = L_aux[4] + ' ' + List[i]
 
-        elif List[i]=="Hollande":
-            L_aux[3] = L_aux[3]+' '+List[i]
+        elif List[i] == "Hollande":
+            L_aux[3] = L_aux[3] + ' ' + List[i]
 
-        elif List[i]=="Mitterrand":
-            L_aux[5] =L_aux[3] + ' ' + List[i]
+        elif List[i] == "Mitterrand":
+            L_aux[5] = L_aux[3] + ' ' + List[i]
 
     for i in L_aux:
-        dic[i]=[]
+        dic[i] = []
     for name in List:
         for file in f:
             for name_m in L_aux:
                 if name in file and name in name_m:
                     dic[name_m].append(file)
-    return(dic)
+    return (dic)
+
 
 def conversion_mini(f):
     """
@@ -85,6 +94,7 @@ def conversion_mini(f):
             fichier_new.write(ligne.lower())
         fichier_new.close()
     return None
+
 
 def clean_fichier(f):
     """
@@ -111,9 +121,7 @@ def clean_fichier(f):
     return None
 
 
-
 #############################      TF_IDF Functions      ####################################
-
 
 
 # La méthode TF-IDF
@@ -135,20 +143,27 @@ def occ_mots(c):
             dic[i] = occ
     return dic
 
-def idf_mots(repertory):
-    dic={}
-    nb_doc = len(repertoire_fichiers(repertory))
-    for i in repertoire_fichiers(repertory):
-        with open(f"{repertory}/{i}",'r') as F:
-            L=set(F.read().split())
+
+def idf_mots(rep):
+    """
+    Compute IDF of all words
+    :param rep: string that is the directory
+    :return: dictionnary {word : IDF}
+    """
+    dic = {}
+    nb_doc = len(repertoire_fichiers(rep))
+    for i in repertoire_fichiers(rep):
+        with open(f"{rep}/{i}", 'r') as F:
+            L = set(F.read().split())
         for i in L:
             if i not in dic.keys():
-                dic[i]=1
+                dic[i] = 1
             else:
-                dic[i]+=1
+                dic[i] += 1
     for i in dic:
-        dic[i]=log(nb_doc/dic[i])
-    return(dic)
+        dic[i] = log10(nb_doc / dic[i])
+    return (dic)
+
 
 def matrice_TF_IDF(r):
     """
@@ -170,18 +185,19 @@ def matrice_TF_IDF(r):
                 if mots_idf[mot] or tf[mot]:
                     tf_idf_fichiers.append(tf[mot] * mots_idf[mot])
                 else:
-                    tf_idf_fichiers.append(0.0)
+                    tf_idf_fichiers.append(0.0) # If idf or tf is equal to 0.0 just put a 0.0
             else:
-                tf_idf_fichiers.append(0.0)
+                tf_idf_fichiers.append(0.0) # If the word is not present just put a 0.0
         matrix.append(tf_idf_fichiers)
 
     return transpose_matrix(matrix)  # To have the matrix which a row is a word and a column is a file
+
 
 def transpose_matrix(matrix):
     """
     Function that compute the transpose of a matrix
     :param matrix: The matrix
-    :return: The transpose of the matrix
+    :return: Transpose of the matrix
     """
     rows = len(matrix)
     columns = len(matrix[0])
@@ -192,27 +208,31 @@ def transpose_matrix(matrix):
 
     return new_matrix
 
+
 def TF_IDF(repertory, show=False):
     '''
+    Function that compute the matrix TF-IDF not as a list but as a dictionnary
+    :param show: If display the matrix or not
     :param repertory: string(the path to the directory)
-    :return: matrix (TF_IDF matrix)
+    :return: Dictionnary which represent the matrix {word : [TF_IDF for each file]}
     '''
     D_word_IDF = idf_mots(repertory)
     dico = {}
     for words in D_word_IDF.keys():
-        dico[words]=[]
+        dico[words] = []
     for files in repertoire_fichiers(repertory):
-        with open((repertory+'/'+files),'r') as file:
+        with open((repertory + '/' + files), 'r') as file:
             string = file.read()
             D_word_TF = occ_mots(string)
         for words in D_word_IDF.keys():
             if words in D_word_TF.keys():
-                dico[words].append(D_word_TF[words]*D_word_IDF[words])
+                dico[words].append(D_word_TF[words] * D_word_IDF[words])
             else:
                 dico[words].append(0)
     if show:
         show_display(dico)
-    return(dico)
+    return (dico)
+
 
 def show_display(dic):
     '''
@@ -224,18 +244,16 @@ def show_display(dic):
     '''
     maxi = max([len(i) for i in dic.keys()])
     for i in dic.keys():
-        print(i,' '*(maxi-len(i)),':',' ',dic[i])
-
+        print(i, ' ' * (maxi - len(i)), ':', ' ', dic[i])
 
 
 #######################      Features      #########################
 
 
-
 def higher_word(rep):
     '''
     function that display words with the highest TF-IDF
-    :param rep: repository
+    :param rep: directory
     :return: None
     '''
     dico = TF_IDF(rep)
@@ -252,10 +270,11 @@ def higher_word(rep):
         for i in M:
             del dic[i]
 
-def least_important_word(rep,recup=False,show=True):
+
+def least_important_word(rep, recup=False, show=True):
     """
     Display the list of least important words in the document corpus
-    :param rep: repository
+    :param rep: directory
     :param recup: if we return the list or not
     :param show: if we show the list or not
     :return: By default None, if recup is true --> return the list
@@ -275,11 +294,12 @@ def least_important_word(rep,recup=False,show=True):
     elif not show and recup:
         return list_lest_imp_word
 
+
 def most_repeated_word(rep, show=False, min_letter=2):
     """
     Display the most repeated word of a prsident
     :param min_letter: The minimum of letter of words to display (by default 2)
-    :param rep: repository
+    :param rep: directory
     :param show: Choose if only want to display the most repeated word(s) or only returning the list of them (by default)
     :return: By default : the list of the most repeated word(s) by a President ; if show True : None
     """
@@ -289,11 +309,11 @@ def most_repeated_word(rep, show=False, min_letter=2):
     names = [name.lower() for name in exctraction_nom(files)]
     # Taking all name of president in files (in lower case to make easy the check)
 
-    while president not in names: # Verify if the word is present
+    while president not in names:  # Verify if the word is present
         print("There isn't this president ")
         president = input("Enter the name of the president : ").lower()
 
-    nb_words = int(input("How many words you want to see ? : ")) # display nb_words most repeated
+    nb_words = int(input("How many words you want to see ? : "))  # display nb_words most repeated
     while nb_words <= 0:
         nb_words = int(input("Enter a positive non zero number : "))
 
@@ -315,19 +335,20 @@ def most_repeated_word(rep, show=False, min_letter=2):
     word_most_repeated = maxi_keys_dic(dic_occ_word)
 
     if show:
-        print("="*50)
+        print("=" * 50)
         print(f"The {nb_words} most repeated words of {president} : ", "\n")
         cpt = 1
-        for word in word_most_repeated: # To have only the nb_words most repeated words
+        for word in word_most_repeated:  # To have only the nb_words most repeated words
             if len(word) >= min_letter and cpt <= nb_words:
                 print(word, end=" ; ")
                 cpt += 1
             elif cpt > nb_words:
-                break # No need to go further, all needed words were display
+                break  # No need to go further, all needed words were display
         print("\n")
         print("=" * 50)
     else:
         return word_most_repeated
+
 
 def maxi_keys_dic(dic):
     """
@@ -339,8 +360,8 @@ def maxi_keys_dic(dic):
     new_dic = dic
 
     for j in range(len(new_dic)):
-        maxi_val = [i for i in new_dic.values()][0] # Récupération d'une valeur dans le dic
-        maxi_key = [i for i in new_dic.keys()][0] # Récupération d'une valeur dans le dic
+        maxi_val = [i for i in new_dic.values()][0]  # Récupération d'une valeur dans le dic
+        maxi_key = [i for i in new_dic.keys()][0]  # Récupération d'une valeur dans le dic
         for i in new_dic:
             if new_dic[i] > maxi_val:
                 maxi_val = new_dic[i]
@@ -350,21 +371,22 @@ def maxi_keys_dic(dic):
 
     return sorted_list
 
+
 def president_word(rep):
     '''
-    functinality that alow the user to enter a word and know all the president
+    function that alow the user to enter a word and know all the president
     that said the word and also the president that said it the most
-    :param rep: repertory of files
+    :param rep: directory
     :return: none ( only display )
     '''
     List_name = association_name(repertoire_fichiers(rep))
     word = input("Enter the word that president talk about : ")
-    if word.lower() in TF_IDF(rep) :
+    if word.lower() in TF_IDF(rep):
         List = TF_IDF(rep)[word.lower()]
         fichiers = repertoire_fichiers(rep)
         seto = set()
         for name in List_name:
-            n=0
+            n = 0
             for file in List_name[name]:
                 n += List[fichiers.index(file)]
             List_name[name] = n
@@ -374,19 +396,20 @@ def president_word(rep):
             seto = List_name
         else:
             for i in List_name:
-                if List_name[i]!=0:
+                if List_name[i] != 0:
                     seto.add(i)
 
         maximum = max(List_name.values())
         for i in seto:
             print(i, " said ", word)
-            if List_name[i]==maximum:
+            if List_name[i] == maximum:
                 winner = i
         print("The president that said the most ", word, " is ", winner)
     else:
         print(f"No one talked about {word} ")
 
-def mention_all(rep, max_occ = 3, min_letter = 6):
+
+def mention_all(rep, max_occ=3, min_letter=6):
     '''
     functionlity that display all the important word that presidents said
     :param rep: repertory of files
@@ -423,7 +446,7 @@ def first_president(rep, nb_words=1):
     """
     Identify the first president to talk about a word
     :param nb_words: The numbers of words want to know which president said it first
-    :param rep: repository
+    :param rep: directory
     :return: None
     """
     words = [input("The word : ") for i in range(nb_words)]
@@ -478,7 +501,7 @@ def menu(rep):
             if choice_2 == 1:
                 print(matrice_TF_IDF(rep))
             elif choice_2 == 2:
-                TF_IDF(rep,show=True)
+                TF_IDF(rep, show=True)
 
         elif choice_1 == 2:
             print("=" * 50)
@@ -487,7 +510,7 @@ def menu(rep):
             print("3) Display the most repeated word(s) by a President ")
             print("4) Display the president that spoke about a word and the one who repeated it the most times ")
             print("5) Display the first president who talk about some words ")
-            print("6) Displat words that all president mention ")
+            print("6) Display words that all president mention ")
             print("7) Back")
             print("=" * 50)
 
@@ -515,7 +538,7 @@ def menu(rep):
                     print("Enter a positive non zeo value !!")
                     nb_word = int(input("How many words you want to display ? : "))
 
-                first_president(rep)
+                first_president(rep, nb_words=nb_word)
             elif choice_3 == 6:
                 mention_all(rep)
 
@@ -524,3 +547,213 @@ def menu(rep):
 
         else:
             print("Invalid Option. Try Again !")
+
+
+def graphic_menu(rep):
+    # Creation of the window
+    window = Tk()
+
+    #Personnalisation of the window
+    window.title("My First Chat Bot")
+    window.geometry("800x520")
+    window.config(background='#3AA79F')
+
+    # Creation of the frame
+    frame = Frame(window, bg='#3AA79F')
+
+    # Creation of text
+    texte = Label(window, text="Chose one option ", font=("Courrier",40),bg="#3AA79F")
+    texte.pack()
+
+    def new_window_matrix():
+        """
+        Create a new window for the button matrix
+        :return: None
+        """
+        window_matrix = Toplevel(window)
+        window_matrix.title("Matrix")
+        window_matrix.geometry("1200x620")
+        window_matrix.config(background='#3AA79F')
+
+        frame = Frame(window_matrix, bg='#3AA79F')
+
+        new_label = Label(frame, text="Chose one option")
+        new_label.grid(row=0, column=0, sticky="ew")
+
+        # Creation of button
+        button_1 = Button(frame, text="Display The Matrix TF-IDF", command=lambda : option_matrix(1,text))
+        button_1.grid(row=1, column=0, sticky="ew")
+
+        button_2 = Button(frame, text="Display The Matrix TF-IDF word by word", command=lambda : option_matrix(2,text))
+        button_2.grid(row=2, column=0, sticky="ew")
+
+        button_3 = Button(frame, text="Back", command=window_matrix.destroy)
+        button_3.grid(row=3, column=0, sticky="ew")
+
+        # Creation of text
+        text = scrolledtext.ScrolledText(window_matrix, wrap=WORD, width=150, height=20)
+        text.pack(side=BOTTOM, pady=20)
+
+        frame.pack(side=TOP, pady=20)
+
+    def new_window_features():
+        """
+        Create a new window for the button features
+        :return: None
+        """
+        window_features = Toplevel(window)
+        window_features.title("Features")
+        window_features.geometry("1120x600")
+        window_features.config(background='#3AA79F')
+
+        frame_features3 = Frame(window_features, bg="lightblue")
+        frame_features = Frame(frame_features3, bg="lightblue")
+
+
+        new_label = Label(frame_features3, text="Chose one option")
+        new_label.grid(row=0, column=0, sticky="ew")
+
+        button_1 = Button(frame_features,
+                          text="Display The list of least important words in the document corpus" ,
+                          command=lambda : option_features(1,text))
+        button_1.grid(row=0, column=0, sticky="ew")
+
+        button_2 = Button(frame_features,
+                          text="Display the word(s) with the highest TD-IDF score",
+                          command=lambda : option_features(2,text))
+        button_2.grid(row=1, column=0, sticky="ew")
+
+        button_3 = Button(frame_features,
+                          text="Display the most repeated word(s) by a President",
+                          command=lambda : option_features(3,text))
+        button_3.grid(row=2, column=0, sticky="ew")
+
+        button_4 = Button(frame_features,
+                          text="Display the president that spoke about a word and the one who repeated it the most times",
+                          command=lambda : option_features(4,text))
+        button_4.grid(row=0, column=1, sticky="ew")
+
+        button_5 = Button(frame_features,
+                          text="Display the first president who talk about some words",
+                          command=lambda : option_features(5,text))
+        button_5.grid(row=1, column=1, sticky="ew")
+
+        button_6 = Button(frame_features,
+                          text="Display words that all president mention",
+                          command=lambda : option_features(6,text))
+        button_6.grid(row=2, column=1, sticky="ew")
+
+        button_7 = Button(frame_features3, text="Back", command=window_features.destroy)
+        button_7.grid(row=2, column=0, sticky="ew")
+
+        text = scrolledtext.ScrolledText(window_features, wrap=WORD, width=150, height=20)
+        text.pack(side=BOTTOM, pady=20)
+
+        frame_features.grid(row=1, column=0)
+        frame_features3.pack(side=TOP, pady=20)
+
+
+    def option_matrix(button_nb, text):
+        """
+        Function that display text in fuction of what was press in the matrix window
+        :param text: The text where it will display what the user want
+        :param button_nb: The button number (integer)
+        :return: None
+        """
+        if button_nb == 1:
+            text.delete(1.0, END) # To delete the text that previously here
+            for word in matrice_TF_IDF(rep):
+                text.insert(END, str(word) + '\n')
+        elif button_nb == 2:
+            text.delete(1.0, END)
+            dic = TF_IDF(rep)
+            maxi = max([len(i) for i in dic.keys()])
+            for i in dic.keys():
+                texte = i + ' ' * (maxi - len(i)) + ':' + ' ' + str(dic[i])
+                text.insert(END, texte + '\n')
+
+
+    def option_features(button_nb, text):
+        """
+        Function that display text in fuction of what was press in the features window
+        :param text: The text where it will display what the user want
+        :param button_nb: The button number (integer)
+        :return: None
+        """
+        if button_nb == 1:
+            text.delete(1.0, END)
+            text.insert(END, str(least_important_word(rep, show=False, recup=True)))
+        elif button_nb == 2:
+            text.delete(1.0, END)
+            dic = TF_IDF(rep)
+            big = [max(i) for i in dic.values()]
+            n = 5 # By default, will display the 5 word with the highest TF_IDF score
+            for i in range(n):
+                M = []
+                for j in dic:
+                    if max(big) in dic[j]:
+                        new_texte = j + " : " + str(dic[j])
+                        text.insert(END, new_texte + '\n')
+                        M.append(j)
+                big.remove(max(big))
+                for i in M:
+                    del dic[i]
+
+        elif button_nb == 3:
+            text.delete(1.0, END)
+            text.insert(END, "Not Working Yet !! (sorry) (for the graphic menu, the console menu is working perfectly)")
+            # For this one i have some issues so it will not working yet (for the graphic menu, the console menu is working perfectly)
+
+        elif button_nb == 4:
+            text.delete(1.0, END)
+            text.insert(END, "Not Working Yet !! (sorry) (for the graphic menu, the console menu is working perfectly)")
+            # For this one i have some issues so it will not working yet (for the graphic menu, the console menu is working perfectly)
+
+        elif button_nb == 5:
+            text.delete(1.0, END)
+            text.insert(END, "Not Working Yet !! (sorry) (for the graphic menu, the console menu is working perfectly) ")
+            # For this one i have some issues so it will not working yet (for the graphic menu, the console menu is working perfectly
+
+        elif button_nb == 6:
+            text.delete(1.0, END)
+            min_letter = 6
+            max_occ = 3
+            dic = idf_mots(rep)
+            fichiers = repertoire_fichiers(rep)
+            for i in dic.copy():
+                if dic[i] != 0:
+                    del dic[i]
+                else:
+                    dic[i] = []
+            for file in fichiers:
+                with open(f"cleaned/{file}", 'r') as f1:
+                    TF = occ_mots(f1.read())
+                for i in dic:
+                    dic[i].append(TF[i])
+            List_word = []
+            for i in dic:
+                valid = 0
+                for j in dic[i]:
+                    if j >= 10:
+                        valid += 1
+                if valid <= max_occ and len(i) >= min_letter:
+                    List_word.append(i)
+            text.insert(END, "The word(s) that all presidents mention ( with a minimum of letter of 6) : " + "\n")
+            for i in List_word:
+                text.insert(END,i + '\n')
+
+
+    # Creation of Button
+    button_1 = Button(frame, text='Matrix', font=("Courrier",25), bg='white', fg="#3AA79F", command=new_window_matrix)
+    button_1.grid(row=0, sticky="ew", pady=2)
+
+    button_2 = Button(frame, text='Features', font=("Courrier", 25), bg='white', fg="#3AA79F", command=new_window_features)
+    button_2.grid(row=1, sticky="ew", pady=2)
+
+    button_3 = Button(frame, text='Exit', font=("Courrier", 25), bg='white', fg="#3AA79F", command=window.destroy)
+    # Pour fermer la fenetre
+    button_3.grid(row=2, sticky="ew", pady=2)
+
+    frame.pack(expand=True)
+    window.mainloop()
+
