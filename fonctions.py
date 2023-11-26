@@ -3,6 +3,8 @@
 # Importation des modules nécessaires pour certaines fonctions
 from math import log10
 from os import listdir
+from tkinter import *
+from tkinter import scrolledtext
 
 
 #############################     Basic Functions     ####################################
@@ -508,7 +510,7 @@ def menu(rep):
             print("3) Display the most repeated word(s) by a President ")
             print("4) Display the president that spoke about a word and the one who repeated it the most times ")
             print("5) Display the first president who talk about some words ")
-            print("6) Displat words that all president mention ")
+            print("6) Display words that all president mention ")
             print("7) Back")
             print("=" * 50)
 
@@ -545,3 +547,216 @@ def menu(rep):
 
         else:
             print("Invalid Option. Try Again !")
+
+
+
+
+
+def graphic_menu(rep):
+    # Creation of the window
+    window = Tk()
+
+    #Personnalisation of the window
+    window.title("My First Chat Bot")
+    window.geometry("800x520")
+    window.config(background='#3AA79F')
+
+    # Creation of the frame
+    frame = Frame(window, bg='#3AA79F')
+
+    # Creation of text
+    texte = Label(window, text="Chose one option ", font=("Courrier",40),bg="#3AA79F")
+    texte.pack()
+
+    def new_window_matrix():
+        """
+        Create a new window for the button matrix
+        :return: None
+        """
+        window_matrix = Toplevel(window)
+        window_matrix.title("Matrix")
+        window_matrix.geometry("1200x620")
+        window_matrix.config(background='#3AA79F')
+
+        frame = Frame(window_matrix, bg='#3AA79F')
+
+        new_label = Label(frame, text="Chose one option")
+        new_label.grid(row=0, column=0, sticky="ew")
+
+        # Creation of button
+        button_1 = Button(frame, text="Display The Matrix TF-IDF", command=lambda : option_matrix(1,text))
+        button_1.grid(row=1, column=0, sticky="ew")
+
+        button_2 = Button(frame, text="Display The Matrix TF-IDF word by word", command=lambda : option_matrix(2,text))
+        button_2.grid(row=2, column=0, sticky="ew")
+
+        button_3 = Button(frame, text="Back", command=window_matrix.destroy)
+        button_3.grid(row=3, column=0, sticky="ew")
+
+        # Creation of text
+        text = scrolledtext.ScrolledText(window_matrix, wrap=WORD, width=150, height=20)
+        text.pack(side=BOTTOM, pady=20)
+
+        frame.pack(side=TOP, pady=20)
+
+    def new_window_features():
+        """
+        Create a new window for the button features
+        :return: None
+        """
+        window_features = Toplevel(window)
+        window_features.title("Features")
+        window_features.geometry("1120x600")
+        window_features.config(background='#3AA79F')
+
+        frame_features3 = Frame(window_features, bg="lightblue")
+        frame_features = Frame(frame_features3, bg="lightblue")
+
+
+        new_label = Label(frame_features3, text="Chose one option")
+        new_label.grid(row=0, column=0, sticky="ew")
+
+        button_1 = Button(frame_features,
+                          text="Display The list of least important words in the document corpus" ,
+                          command=lambda : option_features(1,text))
+        button_1.grid(row=0, column=0, sticky="ew")
+
+        button_2 = Button(frame_features,
+                          text="Display the word(s) with the highest TD-IDF score",
+                          command=lambda : option_features(2,text))
+        button_2.grid(row=1, column=0, sticky="ew")
+
+        button_3 = Button(frame_features,
+                          text="Display the most repeated word(s) by a President",
+                          command=lambda : option_features(3,text))
+        button_3.grid(row=2, column=0, sticky="ew")
+
+        button_4 = Button(frame_features,
+                          text="Display the president that spoke about a word and the one who repeated it the most times",
+                          command=lambda : option_features(4,text))
+        button_4.grid(row=0, column=1, sticky="ew")
+
+        button_5 = Button(frame_features,
+                          text="Display the first president who talk about some words",
+                          command=lambda : option_features(5,text))
+        button_5.grid(row=1, column=1, sticky="ew")
+
+        button_6 = Button(frame_features,
+                          text="Display words that all president mention",
+                          command=lambda : option_features(6,text))
+        button_6.grid(row=2, column=1, sticky="ew")
+
+        button_7 = Button(frame_features3, text="Back", command=window_features.destroy)
+        button_7.grid(row=2, column=0, sticky="ew")
+
+        text = scrolledtext.ScrolledText(window_features, wrap=WORD, width=150, height=20)
+        text.pack(side=BOTTOM, pady=20)
+
+        frame_features.grid(row=1, column=0)
+        frame_features3.pack(side=TOP, pady=20)
+
+
+    def option_matrix(button_nb, text):
+        """
+        Function that display text in fuction of what was press in the matrix window
+        :param text: The text where it will display what the user want
+        :param button_nb: The button number (integer)
+        :return: None
+        """
+        if button_nb == 1:
+            text.delete(1.0, END) # To delete the text that previously here
+            for word in matrice_TF_IDF(rep):
+                text.insert(END, str(word) + '\n')
+        elif button_nb == 2:
+            text.delete(1.0, END)
+            dic = TF_IDF(rep)
+            maxi = max([len(i) for i in dic.keys()])
+            for i in dic.keys():
+                texte = i + ' ' * (maxi - len(i)) + ':' + ' ' + str(dic[i])
+                text.insert(END, texte + '\n')
+
+
+    def option_features(button_nb, text):
+        """
+        Function that display text in fuction of what was press in the features window
+        :param text: The text where it will display what the user want
+        :param button_nb: The button number (integer)
+        :return: None
+        """
+        if button_nb == 1:
+            text.delete(1.0, END)
+            text.insert(END, str(least_important_word(rep, show=False, recup=True)))
+        elif button_nb == 2:
+            text.delete(1.0, END)
+            dic = TF_IDF(rep)
+            big = [max(i) for i in dic.values()]
+            n = 5 # By default, will display the 5 word with the highest TF_IDF score
+            for i in range(n):
+                M = []
+                for j in dic:
+                    if max(big) in dic[j]:
+                        new_texte = j + " : " + str(dic[j])
+                        text.insert(END, new_texte + '\n')
+                        M.append(j)
+                big.remove(max(big))
+                for i in M:
+                    del dic[i]
+
+        elif button_nb == 3:
+            text.delete(1.0, END)
+            text.insert(END, "Not Working Yet !! (sorry)")
+            # For this one i have some issues so it will not working yet
+
+        elif button_nb == 4:
+            text.delete(1.0, END)
+            text.insert(END, "Not Working Yet !! (sorry)")
+            # For this one i have some issues so it will not working yet
+
+        elif button_nb == 5:
+            text.delete(1.0, END)
+            text.insert(END, "Not Working Yet !! (sorry)")
+            # For this one i have some issues so it will not working yet
+
+        elif button_nb == 6:
+            text.delete(1.0, END)
+            min_letter = 6
+            max_occ = 3
+            dic = idf_mots(rep)
+            fichiers = repertoire_fichiers(rep)
+            for i in dic.copy():
+                if dic[i] != 0:
+                    del dic[i]
+                else:
+                    dic[i] = []
+            for file in fichiers:
+                with open(f"cleaned/{file}", 'r') as f1:
+                    TF = occ_mots(f1.read())
+                for i in dic:
+                    dic[i].append(TF[i])
+            List_word = []
+            for i in dic:
+                valid = 0
+                for j in dic[i]:
+                    if j >= 10:
+                        valid += 1
+                if valid <= max_occ and len(i) >= min_letter:
+                    List_word.append(i)
+            text.insert(END, "The word(s) that all presidents mention ( with a minimum of letter of 6) : " + "\n")
+            for i in List_word:
+                text.insert(END,i + '\n')
+
+
+    # Creation of Button
+    button_1 = Button(frame, text='Matrix', font=("Courrier",25), bg='white', fg="#3AA79F", command=new_window_matrix)
+    button_1.grid(row=0, sticky="ew", pady=2)
+
+    button_2 = Button(frame, text='Features', font=("Courrier", 25), bg='white', fg="#3AA79F", command=new_window_features)
+    button_2.grid(row=1, sticky="ew", pady=2)
+
+    button_3 = Button(frame, text='Exit', font=("Courrier", 25), bg='white', fg="#3AA79F", command=window.destroy)
+    # Pour fermer la fenetre
+    button_3.grid(row=2, sticky="ew", pady=2)
+
+    frame.pack(expand=True)
+    window.mainloop()
+
