@@ -5,7 +5,9 @@ from math import log
 from os import listdir
 
 
-#################################################################
+#############################     files functions     ####################################
+
+
 
 # Toutes les fonctions de bases
 def repertoire_fichiers(r):
@@ -84,7 +86,6 @@ def conversion_mini(f):
         fichier_new.close()
     return None
 
-
 def clean_fichier(f):
     """
     Fonction qui "clean" les fichiers afin de supprimer tous les caractéres spéciaux laissant qu'un fichier
@@ -110,7 +111,10 @@ def clean_fichier(f):
     return None
 
 
-#################################################################
+
+#############################      all functions needed for TF IDF        ####################################
+
+
 
 # La méthode TF-IDF
 def occ_mots(c):
@@ -173,7 +177,6 @@ def matrice_TF_IDF(r):
 
     return transpose_matrix(matrix)  # To have the matrix which a row is a word and a column is a file
 
-
 def transpose_matrix(matrix):
     """
     Function that compute the transpose of a matrix
@@ -188,7 +191,6 @@ def transpose_matrix(matrix):
             new_matrix[j][i] = matrix[i][j]
 
     return new_matrix
-
 
 def TF_IDF(repertory, show=False):
     '''
@@ -225,11 +227,16 @@ def show_display(dic):
         print(i,' '*(maxi-len(i)),':',' ',dic[i])
 
 
+
+#######################      Fonctionality      #########################
+
+
+
 def most_higher(rep):
     '''
     function that return the most higher word
     :param dic: dic of TF IDF
-    :return: dico
+    :return: None
     '''
     dico = TF_IDF(rep)
     dic = dico.copy()
@@ -244,7 +251,6 @@ def most_higher(rep):
         big.remove(max(big))
         for i in M:
             del dic[i]
-
 
 def least_important_word(rep,recup=False,show=True):
     """
@@ -268,8 +274,6 @@ def least_important_word(rep,recup=False,show=True):
         return list_lest_imp_word
     elif not show and recup:
         return list_lest_imp_word
-
-
 
 def most_repeated_word(rep, show=False, min_letter=2):
     """
@@ -325,7 +329,6 @@ def most_repeated_word(rep, show=False, min_letter=2):
     else:
         return word_most_repeated
 
-
 def maxi_keys_dic(dic):
     """
     Function that sorting keys from the highest value to the smallest one
@@ -346,7 +349,6 @@ def maxi_keys_dic(dic):
         del d[maxi_key]
 
     return L
-
 
 def president_word(rep):
     '''
