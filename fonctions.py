@@ -239,7 +239,7 @@ def least_important_word(rep,recup=False,show=True):
         return list_lest_imp_word
 
 
-def most_repeated_word(rep,show=False):
+def most_repeated_word(rep, show=False):
     """
     Display the most repeated word of a prsident
     :param rep: repository
@@ -260,32 +260,58 @@ def most_repeated_word(rep,show=False):
     while nb_words <= 0:
         nb_words = int(input("Enter a positive non zero number : "))
 
-    word_most_repeated = []
-
+    dic_occ_word = {}
     for file in files:
         if president in file:
             # Check if the name of file corresponding to the president because some president has 2 files
             with open(f"{rep}/{file}", "r") as f1:
                 contenue = f1.read()
-            dic_occ_word = occ_mots(contenue)
-            max = 0
-            word_max = ""
-            for word in dic_occ_word:
-                if dic_occ_word[word] > max and word not in word :
-                    max = dic_occ_word[word]
-                    word_max = word
-            word_most_repeated.append(word_max)
+            dic_occ_word_temp = occ_mots(contenue)
+            for key in dic_occ_word_temp:
+                # To have a dic with all words in the 2 files and the occurence in the 2 files
+                if key in dic_occ_word:
+                    dic_occ_word[key] = dic_occ_word[key] + dic_occ_word_temp[key]
+                    # If the word was already in the previous file, taking the sum of the occ of both
+                else:
+                    dic_occ_word[key] = dic_occ_word_temp[key]
+
+    word_most_repeated = maxi_keys_dic(dic_occ_word)
 
     if show:
-        print("\n")
-        print("="*50, "\n")
-        print(f"The most repeated words of {president} : ", "\n")
-        for word in word_most_repeated[nb_words:]:
-            print(word,end=" ; ")
+        print("="*50)
+        print(f"The {nb_words} most repeated words of {president} : ", "\n")
+        for word in word_most_repeated[:nb_words]: # To have only the nb_words most repeated words
+            print(word, end=" ; ")
         print("\n")
         print("=" * 50)
     else:
         return word_most_repeated
+
+
+def maxi_keys_dic(dic):
+    """
+    Function that sorting keys from the highest value to the smallest one
+    :param dic: dictionnary with integer values
+    :return: sorted list (from the highest to the smallest)
+    """
+    L = []
+    d = dic
+
+    for j in range(len(d)):
+        maxi_val = [i for i in d.values()][0] # Récupération d'une valeur dans le dic
+        maxi_key = [i for i in d.keys()][0] # Récupération d'une valeur dans le dic
+        for i in d:
+            if d[i] > maxi_val:
+                maxi_val = d[i]
+                maxi_key = i
+        L.append(maxi_key)
+        del d[maxi_key]
+
+    return L
+
+
+
+
 
 
 
