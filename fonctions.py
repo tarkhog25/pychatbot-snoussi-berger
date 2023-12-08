@@ -303,6 +303,8 @@ def most_repeated_word(rep, show=False, min_letter=2):
     :param show: Choose if only want to display the most repeated word(s) or only returning the list of them (by default)
     :return: By default : the list of the most repeated word(s) by a President ; if show True : None
     """
+    least_important = least_important_word(rep, recup=True, show=False)
+
     president = input("Enter the name of the president : ").lower()
     files = [file.lower() for file in repertoire_fichiers(rep)]
     # Taking all name of files (in lower case to make easy the check)
@@ -325,12 +327,13 @@ def most_repeated_word(rep, show=False, min_letter=2):
                 contenue = f1.read()
             dic_occ_word_temp = occ_mots(contenue)
             for key in dic_occ_word_temp:
-                # To have a dic with all words in the 2 files and the occurence in the 2 files
-                if key in dic_occ_word:
-                    dic_occ_word[key] = dic_occ_word[key] + dic_occ_word_temp[key]
-                    # If the word was already in the previous file, taking the sum of the occ of both
-                else:
-                    dic_occ_word[key] = dic_occ_word_temp[key]
+                if key not in least_important: # To exclude least important words
+                    # To have a dic with all words in the 2 files and the occurence in the 2 files
+                    if key in dic_occ_word:
+                        dic_occ_word[key] = dic_occ_word[key] + dic_occ_word_temp[key]
+                        # If the word was already in the previous file, taking the sum of the occ of both
+                    else:
+                        dic_occ_word[key] = dic_occ_word_temp[key]
 
     word_most_repeated = maxi_keys_dic(dic_occ_word)
 
@@ -529,7 +532,7 @@ def menu(rep):
                     print("Enter a positive value that is superior of 1 !! ")
                     mini_letter = int(input("What is the minimum of letter of word that you want to display ? : "))
 
-                most_repeated_word(rep, min_letter=mini_letter)
+                most_repeated_word(rep, min_letter=mini_letter, show=True)
             elif choice_3 == 4:
                 president_word(rep)
             elif choice_3 == 5:
