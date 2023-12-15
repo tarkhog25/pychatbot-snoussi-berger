@@ -144,6 +144,35 @@ def list_word(text):
             new_liste.append(new_word)
     return new_liste
 
+
+def words_corpus(list_words):
+    """
+    Look for terms that form the intersection between the set of words
+    in the corpus and the set of words in the question.
+    :param list_words: list of words that make up the question without any
+    punctuation (list from the return of list_words)
+    :return: list that represents that are present in the document corpus
+    """
+    files = repertoire_fichiers("cleaned")
+    words_present = []
+    for word in list_words:
+        check = True
+        i = 0
+        # Using a while with a check to not make useless loop
+        while check and i < len(files):
+            with open(f"cleaned/{files[i]}", "r") as f1:
+                contenue = f1.readlines()
+            for line in contenue:
+                # Checking if the word is in the list of word of the line
+                if word in line.split():
+                    # If it is present stop the loop of the while and of the for
+                    check = False
+                    words_present.append(word)
+                    break
+            i += 1
+    return words_present
+
+
 #############################      TF_IDF Functions      ####################################
 
 
