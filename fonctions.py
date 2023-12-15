@@ -121,6 +121,29 @@ def clean_fichier(f):
     return None
 
 
+def list_word(text):
+    """
+    function that takes the text of the question as a parameter, and returns the list of words that make up the question.
+    :param text: string that represents a sentence and more precisely in our case the question asked
+    :return: list of word that make up the sentence without any punctuation
+    """
+    liste = text.split()
+    new_liste = []
+    for word in liste:
+        # If the word is not a punctuation
+        if word not in "?!":
+            new_word = ""
+            for letter in word:
+                # If there is separator like - or ' create 2 word ex: 'eux-meme' --> 'eux' and 'meme'
+                if letter in "-'":
+                    new_liste.append(new_word)
+                    new_word = ""
+                # Delete all non letter character
+                elif letter not in ",.":
+                    new_word += letter
+            new_liste.append(new_word)
+    return new_liste
+
 #############################      TF_IDF Functions      ####################################
 
 
@@ -185,9 +208,9 @@ def matrice_TF_IDF(r):
                 if mots_idf[mot] or tf[mot]:
                     tf_idf_fichiers.append(tf[mot] * mots_idf[mot])
                 else:
-                    tf_idf_fichiers.append(0.0) # If idf or tf is equal to 0.0 just put a 0.0
+                    tf_idf_fichiers.append(0.0)  # If idf or tf is equal to 0.0 just put a 0.0
             else:
-                tf_idf_fichiers.append(0.0) # If the word is not present just put a 0.0
+                tf_idf_fichiers.append(0.0)  # If the word is not present just put a 0.0
         matrix.append(tf_idf_fichiers)
 
     return transpose_matrix(matrix)  # To have the matrix which a row is a word and a column is a file
@@ -327,7 +350,7 @@ def most_repeated_word(rep, show=False, min_letter=2):
                 contenue = f1.read()
             dic_occ_word_temp = occ_mots(contenue)
             for key in dic_occ_word_temp:
-                if key not in least_important: # To exclude least important words
+                if key not in least_important:  # To exclude least important words
                     # To have a dic with all words in the 2 files and the occurence in the 2 files
                     if key in dic_occ_word:
                         dic_occ_word[key] = dic_occ_word[key] + dic_occ_word_temp[key]
@@ -556,7 +579,7 @@ def graphic_menu(rep):
     # Creation of the window
     window = Tk()
 
-    #Personnalisation of the window
+    # Personnalisation of the window
     window.title("My First Chat Bot")
     window.geometry("800x520")
     window.config(background='#3AA79F')
@@ -565,7 +588,7 @@ def graphic_menu(rep):
     frame = Frame(window, bg='#3AA79F')
 
     # Creation of text
-    texte = Label(window, text="Chose one option ", font=("Courrier",40),bg="#3AA79F")
+    texte = Label(window, text="Chose one option ", font=("Courrier", 40), bg="#3AA79F")
     texte.pack()
 
     def new_window_matrix():
@@ -584,10 +607,10 @@ def graphic_menu(rep):
         new_label.grid(row=0, column=0, sticky="ew")
 
         # Creation of button
-        button_1 = Button(frame, text="Display The Matrix TF-IDF", command=lambda : option_matrix(1,text))
+        button_1 = Button(frame, text="Display The Matrix TF-IDF", command=lambda: option_matrix(1, text))
         button_1.grid(row=1, column=0, sticky="ew")
 
-        button_2 = Button(frame, text="Display The Matrix TF-IDF word by word", command=lambda : option_matrix(2,text))
+        button_2 = Button(frame, text="Display The Matrix TF-IDF word by word", command=lambda: option_matrix(2, text))
         button_2.grid(row=2, column=0, sticky="ew")
 
         button_3 = Button(frame, text="Back", command=window_matrix.destroy)
@@ -612,38 +635,37 @@ def graphic_menu(rep):
         frame_features3 = Frame(window_features, bg="lightblue")
         frame_features = Frame(frame_features3, bg="lightblue")
 
-
         new_label = Label(frame_features3, text="Chose one option")
         new_label.grid(row=0, column=0, sticky="ew")
 
         button_1 = Button(frame_features,
-                          text="Display The list of least important words in the document corpus" ,
-                          command=lambda : option_features(1,text))
+                          text="Display The list of least important words in the document corpus",
+                          command=lambda: option_features(1, text))
         button_1.grid(row=0, column=0, sticky="ew")
 
         button_2 = Button(frame_features,
                           text="Display the word(s) with the highest TD-IDF score",
-                          command=lambda : option_features(2,text))
+                          command=lambda: option_features(2, text))
         button_2.grid(row=1, column=0, sticky="ew")
 
         button_3 = Button(frame_features,
                           text="Display the most repeated word(s) by a President",
-                          command=lambda : option_features(3,text))
+                          command=lambda: option_features(3, text))
         button_3.grid(row=2, column=0, sticky="ew")
 
         button_4 = Button(frame_features,
                           text="Display the president that spoke about a word and the one who repeated it the most times",
-                          command=lambda : option_features(4,text))
+                          command=lambda: option_features(4, text))
         button_4.grid(row=0, column=1, sticky="ew")
 
         button_5 = Button(frame_features,
                           text="Display the first president who talk about some words",
-                          command=lambda : option_features(5,text))
+                          command=lambda: option_features(5, text))
         button_5.grid(row=1, column=1, sticky="ew")
 
         button_6 = Button(frame_features,
                           text="Display words that all president mention",
-                          command=lambda : option_features(6,text))
+                          command=lambda: option_features(6, text))
         button_6.grid(row=2, column=1, sticky="ew")
 
         button_7 = Button(frame_features3, text="Back", command=window_features.destroy)
@@ -655,7 +677,6 @@ def graphic_menu(rep):
         frame_features.grid(row=1, column=0)
         frame_features3.pack(side=TOP, pady=20)
 
-
     def option_matrix(button_nb, text):
         """
         Function that display text in fuction of what was press in the matrix window
@@ -664,7 +685,7 @@ def graphic_menu(rep):
         :return: None
         """
         if button_nb == 1:
-            text.delete(1.0, END) # To delete the text that previously here
+            text.delete(1.0, END)  # To delete the text that previously here
             for word in matrice_TF_IDF(rep):
                 text.insert(END, str(word) + '\n')
         elif button_nb == 2:
@@ -674,7 +695,6 @@ def graphic_menu(rep):
             for i in dic.keys():
                 texte = i + ' ' * (maxi - len(i)) + ':' + ' ' + str(dic[i])
                 text.insert(END, texte + '\n')
-
 
     def option_features(button_nb, text):
         """
@@ -690,7 +710,7 @@ def graphic_menu(rep):
             text.delete(1.0, END)
             dic = TF_IDF(rep)
             big = [max(i) for i in dic.values()]
-            n = 5 # By default, will display the 5 word with the highest TF_IDF score
+            n = 5  # By default, will display the 5 word with the highest TF_IDF score
             for i in range(n):
                 M = []
                 for j in dic:
@@ -714,7 +734,8 @@ def graphic_menu(rep):
 
         elif button_nb == 5:
             text.delete(1.0, END)
-            text.insert(END, "Not Working Yet !! (sorry) (for the graphic menu, the console menu is working perfectly) ")
+            text.insert(END,
+                        "Not Working Yet !! (sorry) (for the graphic menu, the console menu is working perfectly) ")
             # For this one i have some issues so it will not working yet (for the graphic menu, the console menu is working perfectly
 
         elif button_nb == 6:
@@ -743,14 +764,14 @@ def graphic_menu(rep):
                     List_word.append(i)
             text.insert(END, "The word(s) that all presidents mention ( with a minimum of letter of 6) : " + "\n")
             for i in List_word:
-                text.insert(END,i + '\n')
-
+                text.insert(END, i + '\n')
 
     # Creation of Button
-    button_1 = Button(frame, text='Matrix', font=("Courrier",25), bg='white', fg="#3AA79F", command=new_window_matrix)
+    button_1 = Button(frame, text='Matrix', font=("Courrier", 25), bg='white', fg="#3AA79F", command=new_window_matrix)
     button_1.grid(row=0, sticky="ew", pady=2)
 
-    button_2 = Button(frame, text='Features', font=("Courrier", 25), bg='white', fg="#3AA79F", command=new_window_features)
+    button_2 = Button(frame, text='Features', font=("Courrier", 25), bg='white', fg="#3AA79F",
+                      command=new_window_features)
     button_2.grid(row=1, sticky="ew", pady=2)
 
     button_3 = Button(frame, text='Exit', font=("Courrier", 25), bg='white', fg="#3AA79F", command=window.destroy)
@@ -759,4 +780,3 @@ def graphic_menu(rep):
 
     frame.pack(expand=True)
     window.mainloop()
-
