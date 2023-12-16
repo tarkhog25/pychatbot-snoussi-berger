@@ -548,7 +548,7 @@ def norm_vector(vec_a):
     then calculates and returns the square root of
     the sum of the squares of its components. ||A||= sqrt(∑i 𝐴i^2)
     :param vec_a: List representing a vector with a dimension M
-    :return: Integer representing the square root of the sum
+    :return: Float representing the square root of the sum
     """
     summ = 0
     # First compute the sum of the square element of the vector
@@ -556,6 +556,22 @@ def norm_vector(vec_a):
         summ += element ** 2
     # Then compute his square root
     return sqrt(summ)
+
+def score_similarity(vec_a, vec_b):
+    """
+    function that takes two vectors A and B as parameters
+    and returns the result of the following score:
+    Scalar product of A and B / (Norm of the vector A . Norm of the vector B)
+    :param vec_a: List representing a vector with a dimension M
+    :param vec_b: List representing another vector with a dimension M
+    :return: Float representing the score similarity of the two vectors
+    """
+    # Let's take each number we need separately
+    scalar_prod_a_b = scalar_product(vec_a, vec_b)
+    norm_vec_a = norm_vector(vec_a)
+    norm_vec_b = norm_vector(vec_b)
+    return scalar_prod_a_b / (norm_vec_a * norm_vec_b)
+
 
 
 
