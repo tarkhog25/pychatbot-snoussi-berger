@@ -524,6 +524,26 @@ def first_president(rep, nb_words=1):
             print(f"No one talked about '{word}'\n")
 
 
+#######################  Calculating similarity  #########################
+
+def scalar_product(a, b):
+    """
+    function that takes as parameters two vectors A and B of the same
+    dimension M (number of words in the corpus)
+    and calculates and returns A.B = ∑i 𝐴i 𝐵i
+    :param a: List representing a vector with a dimension M
+    :param b: List representing another vector with a dimension M
+    :return: Integer representing the sum
+    """
+    summ = 0
+    # Considering the fact that A and B have the same dimension so no index error by going throw one
+    for i in range(len(a)):
+        summ += a[i] * b[i]
+    return summ
+
+
+
+
 #######################  Menu  #########################
 
 def menu(rep):
