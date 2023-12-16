@@ -1,7 +1,7 @@
 #################################################################
 
 # Importation des modules nécessaires pour certaines fonctions
-from math import log10
+from math import log10, sqrt
 from os import listdir
 from tkinter import *
 from tkinter import scrolledtext
@@ -526,20 +526,36 @@ def first_president(rep, nb_words=1):
 
 #######################  Calculating similarity  #########################
 
-def scalar_product(a, b):
+def scalar_product(vec_a, vec_b):
     """
     function that takes as parameters two vectors A and B of the same
     dimension M (number of words in the corpus)
     and calculates and returns A.B = ∑i 𝐴i 𝐵i
-    :param a: List representing a vector with a dimension M
-    :param b: List representing another vector with a dimension M
+    :param vec_a: List representing a vector with a dimension M
+    :param vec_b: List representing another vector with a dimension M
     :return: Integer representing the sum
     """
     summ = 0
-    # Considering the fact that A and B have the same dimension so no index error by going throw one
-    for i in range(len(a)):
-        summ += a[i] * b[i]
+    # Considering the fact that a and b have the same dimension so no index error by going throw one
+    for i in range(len(vec_a)):
+        summ += vec_a[i] * vec_b[i]
     return summ
+
+
+def norm_vector(vec_a):
+    """
+    Lenght of a vector. function takes a vector A as parameter,
+    then calculates and returns the square root of
+    the sum of the squares of its components. ||A||= sqrt(∑i 𝐴i^2)
+    :param vec_a: List representing a vector with a dimension M
+    :return: Integer representing the square root of the sum
+    """
+    summ = 0
+    # First compute the sum of the square element of the vector
+    for element in vec_a:
+        summ += element ** 2
+    # Then compute his square root
+    return sqrt(summ)
 
 
 
