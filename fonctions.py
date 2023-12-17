@@ -176,7 +176,7 @@ def vector(qet, rep):
     '''
     function that return the TF-IDF vector of each word in a question
     :param qet: str  (the question)
-    :return:
+    :return: list TF-IDF question
     '''
     L_word = list_word(qet)
     qet_t = ''
