@@ -174,23 +174,23 @@ def words_corpus(list_words):
 
 def vector(qet, rep):
     '''
-    function that return the TF-IDF vector of each word in a question
-    :param qet: str  (the question)
-    :return: list TF-IDF question
+    function that return the TF-IDF vector of the question
+    :param qet: string  (the question)
+    :return: list TF-IDF vector
     '''
-    L_word = list_word(qet)
+    L_word = words_corpus(list_word(qet))
     qet_t = ''
     for word in L_word:
         qet_t += word + ' '
     F_qet = occ_mots(qet_t)
     L_wf = idf_mots(rep)
-    L = []
+    list_vector = []
     for word in L_wf:
         if word in F_qet:
-            L.append((F_qet[word]/len(L_word))*L_wf[word])
+            list_vector.append((F_qet[word] / len(L_word)) * L_wf[word])
         else :
-            L.append(0)
-    return(L)
+            list_vector.append(0)
+    return(list_vector)
 
 #############################      TF_IDF Functions      ####################################
 
@@ -881,5 +881,3 @@ def graphic_menu(rep):
     frame.pack(expand=True)
     window.mainloop()
 
-
-print(vector("président, France, Republique-doit.","cleaned"))
