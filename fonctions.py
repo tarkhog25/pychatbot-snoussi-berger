@@ -140,7 +140,7 @@ def list_word(text):
                     new_word = ""
                 # Delete all non letter character
                 elif letter not in ",.":
-                    new_word += letter
+                    new_word += letter.lower()
             new_liste.append(new_word)
     return new_liste
 
@@ -172,6 +172,25 @@ def words_corpus(list_words):
             i += 1
     return words_present
 
+def vector(qet, rep):
+    '''
+    function that return the TF-IDF vector of each word in a question
+    :param qet: str  (the question)
+    :return:
+    '''
+    L_word = list_word(qet)
+    qet_t = ''
+    for word in L_word:
+        qet_t += word + ' '
+    F_qet = occ_mots(qet_t)
+    L_wf = idf_mots(rep)
+    L = []
+    for word in L_wf:
+        if word in F_qet:
+            L.append((F_qet[word]/len(L_word))*L_wf[word])
+        else :
+            L.append(0)
+    return(L)
 
 #############################      TF_IDF Functions      ####################################
 
@@ -861,3 +880,6 @@ def graphic_menu(rep):
 
     frame.pack(expand=True)
     window.mainloop()
+
+
+print(vector("président, France, Republique-doit.","cleaned"))
