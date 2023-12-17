@@ -497,11 +497,11 @@ def menu(rep):
         choice_1 = int(input("Enter a choice : "))
 
         if choice_1 == 1:
-            print("=" * 50)
-            print("1) Display The Matrix TF-IDF ")
-            print("2) Display The Matrix TF-IDF word by word ")
-            print("3) Back")
-            print("=" * 50)
+            print("╔══════════════════════════════════════════════╗")
+            print("1)         Display The Matrix TF-IDF           ╣")
+            print("2)   Display The Matrix TF-IDF word by word    ╣")
+            print("3)               🚪/𝔼𝕩𝕚𝕥\🚪                    ╣")
+            print("╚══════════════════════════════════════════════╝")
 
             choice_2 = int(input("Enter a choice : "))
             while not (0 < choice_2 <= 3):
@@ -514,15 +514,15 @@ def menu(rep):
                 TF_IDF(rep, show=True)
 
         elif choice_1 == 2:
-            print("=" * 50)
-            print("1) Display The list of least important words in the document corpus ")
-            print("2) Display the word(s) with the highest TD-IDF score ")
-            print("3) Display the most repeated word(s) by a President ")
-            print("4) Display the president that spoke about a word and the one who repeated it the most times ")
-            print("5) Display the first president who talk about some words ")
-            print("6) Display words that all president mention ")
-            print("7) Back")
-            print("=" * 50)
+            print("╔═════════════════════════════════════════════════════════════════════════════════════════════════╗")
+            print("1)                Display The list of least important words in the document corpus                ╣")
+            print("2)                       Display the word(s) with the highest TD-IDF score                        ╣")
+            print("3)                       Display the most repeated word(s) by a President                         ╣")
+            print("4)    Display the president that spoke about a word and the one who repeated it the most times    ╣")
+            print("5)                     Display the first president who talk about some words                      ╣")
+            print("6)                           Display words that all president mention                             ╣")
+            print("7)                                         🚪/𝔼𝕩𝕚𝕥\🚪                                             ╣")
+            print("╚═════════════════════════════════════════════════════════════════════════════════════════════════╝")
 
             choice_3 = int(input("Enter a choice : "))
             while not (0 < choice_3 <= 7):
