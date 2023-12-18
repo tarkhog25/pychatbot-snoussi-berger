@@ -171,52 +171,6 @@ def words_corpus(list_words):
                     break
             i += 1
     return words_present
-
-def vector(qet, rep):
-    '''
-    function that return the TF-IDF vector of each word in a question
-    :param qet: str  (the question)
-    :return: list TF-IDF question
-    '''
-    L_word = list_word(qet)
-    qet_t = ''
-    for word in L_word:
-        qet_t += word + ' '
-    F_qet = occ_mots(qet_t)
-    L_wf = idf_mots(rep)
-    L = []
-    for word in L_wf:
-        if word in F_qet:
-            L.append((F_qet[word]/len(L_word))*L_wf[word])
-        else :
-            L.append(0)
-    return(L)
-
-def most_relevant_document(TF_IDF_corpus, TF_IDF_vector, name_of_files):
-    '''
-    function that return the ducument that has the most sens with the question
-    :param TF_IDF_corpus: matrix TF-IDF of the corpus
-    :param TF_IDF_vector: List of The TF-IDF vector of the question
-    :param name_of_files: list of the file name
-    :return: a string with the file name
-    '''
-    dic_word_vector = {}
-    L_result = []
-    for index in range(len(TF_IDF_vector)):
-        if TF_IDF_vector[index] != 0:
-            dic_word_vector[index] = TF_IDF_vector[index]
-    for index in range(len(TF_IDF_corpus)):
-        dif = 0
-        for index_vector in dic_word_vector:
-            if dic_word_vector[index_vector] > TF_IDF_corpus[index][index_vector]:
-                dif += dic_word_vector[index_vector] - TF_IDF_corpus[index][index_vector]
-            else:
-                dif += TF_IDF_corpus[index][index_vector] - dic_word_vector[index_vector]
-        L_result.append(dif)
-
-    min_dif = min(L_result)
-    return(name_of_files[L_result.index(min_dif)])
-
 #############################      TF_IDF Functions      ####################################
 
 
@@ -342,6 +296,25 @@ def show_display(dic):
     for i in dic.keys():
         print(i, ' ' * (maxi - len(i)), ':', ' ', dic[i])
 
+def vector(qet, rep):
+    '''
+    function that return the TF-IDF vector of each word in a question
+    :param qet: str  (the question)
+    :return: list TF-IDF question
+    '''
+    L_word = list_word(qet)
+    qet_t = ''
+    for word in L_word:
+        qet_t += word + ' '
+    F_qet = occ_mots(qet_t)
+    L_wf = idf_mots(rep)
+    L = []
+    for word in L_wf:
+        if word in F_qet:
+            L.append((F_qet[word]/len(L_word))*L_wf[word])
+        else :
+            L.append(0)
+    return(L)
 
 #######################      Features      #########################
 
