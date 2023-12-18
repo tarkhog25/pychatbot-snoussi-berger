@@ -299,7 +299,7 @@ def show_display(dic):
         print(i, ' ' * (maxi - len(i)), ':', ' ', dic[i])
 
 
-def vector(question, rep):
+def vector(question, rep="cleaned"):
     """
     function that return the TF-IDF vector of the question and a dictionary of
     the words in the question associate to their index in the vector.
@@ -600,6 +600,26 @@ def score_similarity(vec_a, vec_b):
     norm_vec_a = norm_vector(vec_a)
     norm_vec_b = norm_vector(vec_b)
     return scalar_prod_a_b / (norm_vec_a * norm_vec_b)
+
+
+#######################  Generating a response #########################
+
+def highest_tf_idf(question):
+    """
+    Function that locate the word with highest TF-IDF in the question
+    :param question: string, representing the question text
+    :return: string representing the word with the highest TF-IDF score
+    """
+    # Getting the vector and the dic of index associate to word
+    vec_question, index_word = vector(question, "cleaned")
+    maxi_tf_idf = vec_question[0]
+    maxi_word = ""
+    for i in range(len(vec_question)):
+        if vec_question[i] >= maxi_tf_idf and vec_question[i] != 0.0:
+            maxi_word = index_word[i]   # Get the word with highest TF-IDF
+            maxi_tf_idf = vec_question[i]
+
+    return maxi_word
 
 
 #######################  Menu  #########################
