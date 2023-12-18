@@ -300,7 +300,7 @@ def show_display(dic):
         print(i, ' ' * (maxi - len(i)), ':', ' ', dic[i])
 
 
-def vector(question, rep):
+def vector(question, rep="cleaned"):
     """
     function that return the TF-IDF vector of the question and a dictionary of
     the words in the question associate to their index in the vector.
@@ -625,6 +625,71 @@ def most_relevant_document(TF_IDF_corpus, TF_IDF_vector, name_of_files):
 
     min_dif = min(L_result)
     return(name_of_files[L_result.index(min_dif)])
+
+#######################  Generating a response #########################
+
+def highest_tf_idf(question):
+    """
+    Function that locate the word with highest TF-IDF in the question
+    :param question: string, representing the question text
+    :return: string representing the word with the highest TF-IDF score
+    """
+    # Getting the vector and the dic of index associate to word
+    vec_question, index_word = vector(question, "cleaned")
+    maxi_tf_idf = vec_question[0]
+    maxi_word = ""
+    for i in range(len(vec_question)):
+        if vec_question[i] >= maxi_tf_idf and vec_question[i] != 0.0:
+            maxi_word = index_word[i]   # Get the word with highest TF-IDF
+            maxi_tf_idf = vec_question[i]
+
+    return maxi_word
+
+def response(question):
+    """
+    Function that from a question give a response
+    :param question: String representing the question asked
+    :return: string, representing the answer
+    """
+    answer = ""
+    concluding_phrases = [
+        ", j'espère que cela répond à votre question. Si vous avez d'autres préoccupations, n'hésitez pas à demander !",
+        ", si vous avez besoin de plus d'informations, je suis là pour vous. Posez-moi une autre question quand vous le souhaitez !",
+        ", n'hésitez pas à me solliciter si vous avez d'autres questions. Je suis là pour vous!",
+        ", c'était un plaisir de vous aider. Si vous avez d'autres questions, n'hésitez pas à les poser.",
+        ", si quelque chose n'est pas clair ou si vous avez besoin de plus d'informations, faites-le moi savoir. Je suis là pour vous!",
+        ", j'espère que cette réponse vous a été utile. Si vous avez des questions supplémentaires, n'hésitez pas à les poser.",
+        ", merci de discuter avec moi! Si vous avez d'autres questions, je suis prêt à y répondre.",
+        ", n'oubliez pas que je suis là pour vous. Si vous avez besoin de plus d'aide, n'hésitez pas à demander.",
+        ", c'est toujours un plaisir d'interagir avec vous. Si vous avez d'autres questions, je suis disponible.",
+        ", j'espère que vous avez trouvé ma réponse utile. Si vous avez d'autres questions, n'hésitez pas à les poser."
+    ]
+    question_starters = {"comment": "Après analyse, ",
+                         "pourquoi": "Car, ",
+                         "peux-tu": "Oui, bien sûr! ",
+                         "qui": "Il s'agit, "}
+    # Let's put the good starters depending on the question
+    for word in question.split():
+        if word.lower() in question_starters.keys():
+            answer += question_starters[word.lower()]
+    TF_IDF_Corpus = transpose_matrix(matrice_TF_IDF("cleaned"))
+    TF_IDF_Question = vector(question)[0]
+    Files_Names = repertoire_fichiers("cleaned")
+    document_file = most_relevant_document(TF_IDF_Corpus, TF_IDF_Question, Files_Names)
+    # Let's take the word that is the most important in the question, so with highest tf-idf
+    word_important = highest_tf_idf(question)
+    with open(f"cleaned/{document_file}","r") as f1:
+        contents = f1.readlines()
+    for line in contents:
+        if word_important in line:
+            answer += line
+            break
+    # Let's put the concluding phrases. The aim here is to choose a random conclude phrase, so to do it without
+    # using random module, i compute the length of the question modulo the number of conclude phrase which always give
+    # an index not out of range
+    index = len(question) % len(concluding_phrases)
+    answer += concluding_phrases[index]
+    return answer
 
 #######################  Menu  #########################
 
