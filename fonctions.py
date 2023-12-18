@@ -192,6 +192,31 @@ def vector(qet, rep):
             L.append(0)
     return(L)
 
+def most_relevant_document(TF_IDF_corpus, TF_IDF_vector, name_of_files):
+    '''
+    function that return the ducument that has the most sens with the question
+    :param TF_IDF_corpus: matrix TF-IDF of the corpus
+    :param TF_IDF_vector: List of The TF-IDF vector of the question
+    :param name_of_files: list of the file name
+    :return: a string with the file name
+    '''
+    dic_word_vector = {}
+    L_result = []
+    for index in range(len(TF_IDF_vector)):
+        if TF_IDF_vector[index] != 0:
+            dic_word_vector[index] = TF_IDF_vector[index]
+    for j in range(len(TF_IDF_corpus)):
+        dif = 0
+        for h in dic_word_vector:
+            if dic_word_vector[h] > TF_IDF_corpus[j][h]:
+                dif += dic_word_vector[h] - TF_IDF_corpus[j][h]
+            else:
+                dif += TF_IDF_corpus[j][h] - dic_word_vector[h]
+        L_result.append(dif)
+
+    max_dif = min(L_result)
+    return(name_of_files[L_result.index(max_dif)])
+
 #############################      TF_IDF Functions      ####################################
 
 
@@ -880,6 +905,3 @@ def graphic_menu(rep):
 
     frame.pack(expand=True)
     window.mainloop()
-
-
-print(vector("président, France, Republique-doit.","cleaned"))
