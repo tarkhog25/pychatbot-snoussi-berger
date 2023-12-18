@@ -172,25 +172,33 @@ def words_corpus(list_words):
             i += 1
     return words_present
 
-def vector(qet, rep):
-    '''
-    function that return the TF-IDF vector of the question
-    :param qet: string  (the question)
-    :return: list TF-IDF vector
-    '''
-    L_word = words_corpus(list_word(qet))
-    qet_t = ''
-    for word in L_word:
-        qet_t += word + ' '
-    F_qet = occ_mots(qet_t)
-    L_wf = idf_mots(rep)
+
+def vector(question, rep):
+    """
+    function that return the TF-IDF vector of the question and a dictionary of
+    the words in the question associate to their index in the vector.
+    :param question: string  (the question)
+    :return: tuple ( list [TF-IDF vector], dic {word of the question: index in the list} )
+    """
+    words = words_corpus(list_word(question))
+    # The function "occ_mots" can be only used by giving it a string so transform the list into
+    # a sentence separated by space to use correctly the function "occ_mots"
+    word_into_string = ''
+    for word in words:
+        word_into_string += word + ' '
+    frequency_words = occ_mots(word_into_string)
+    idf_corpus = idf_mots(rep)
+    word_index = {}  # dic --> Words associate to their index in 'list_vector'
     list_vector = []
-    for word in L_wf:
-        if word in F_qet:
-            list_vector.append((F_qet[word] / len(L_word)) * L_wf[word])
-        else :
-            list_vector.append(0)
-    return(list_vector)
+    index = 0
+    for word in idf_corpus:
+        if word in frequency_words:
+            list_vector.append((frequency_words[word] / len(words)) * idf_corpus[word])
+            word_index[word] = index
+        else:
+            list_vector.append(0.0)
+        index += 1
+    return list_vector, word_index
 
 #############################      TF_IDF Functions      ####################################
 
@@ -575,6 +583,7 @@ def norm_vector(vec_a):
         summ += element ** 2
     # Then compute his square root
     return sqrt(summ)
+
 
 def score_similarity(vec_a, vec_b):
     """
