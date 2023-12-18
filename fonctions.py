@@ -286,6 +286,7 @@ def TF_IDF(repertory, show=False):
     return (dico)
 
 
+
 def show_display(dic):
     '''
     function that display a dic of the form (word  :  [........]
@@ -325,7 +326,6 @@ def vector(question, rep="cleaned"):
             list_vector.append(0.0)
         index += 1
     return list_vector, word_index
-
 
 #######################      Features      #########################
 
@@ -601,6 +601,30 @@ def score_similarity(vec_a, vec_b):
     norm_vec_b = norm_vector(vec_b)
     return scalar_prod_a_b / (norm_vec_a * norm_vec_b)
 
+def most_relevant_document(TF_IDF_corpus, TF_IDF_vector, name_of_files):
+    '''
+    function that return the ducument that has the most sens with the question
+    :param TF_IDF_corpus: matrix TF-IDF of the corpus
+    :param TF_IDF_vector: List of The TF-IDF vector of the question
+    :param name_of_files: list of the file name
+    :return: a string with the file name
+    '''
+    dic_word_vector = {}
+    L_result = []
+    for index in range(len(TF_IDF_vector)):
+        if TF_IDF_vector[index] != 0:
+            dic_word_vector[index] = TF_IDF_vector[index]
+    for index in range(len(TF_IDF_corpus)):
+        dif = 0
+        for index_vector in dic_word_vector:
+            if dic_word_vector[index_vector] > TF_IDF_corpus[index][index_vector]:
+                dif += dic_word_vector[index_vector] - TF_IDF_corpus[index][index_vector]
+            else:
+                dif += TF_IDF_corpus[index][index_vector] - dic_word_vector[index_vector]
+        L_result.append(dif)
+
+    min_dif = min(L_result)
+    return(name_of_files[L_result.index(min_dif)])
 
 #######################  Generating a response #########################
 
