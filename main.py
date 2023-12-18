@@ -8,9 +8,9 @@ if __name__ == "__main__":
     rep = "cleaned"
     if rep not in listdir():
         mkdir(rep)
-        fichiers = repertoire_fichiers("speeches")
-        conversion_mini(fichiers)
-        clean_fichier(repertoire_fichiers(rep))
+        files = files_corpus("speeches")
+        conversion_mini(files)
+        clean_file(files_corpus(rep))
 
     print("╔═══════════════════════════════════════════╗")
     print("║           𝕎𝕖𝕝𝕔𝕠𝕞𝕖 𝕥𝕠 ℂ𝕙𝕒𝕥𝔹𝕠𝕥              ║")

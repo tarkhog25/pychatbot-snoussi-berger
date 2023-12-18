@@ -1,6 +1,6 @@
 #################################################################
 
-# Importation des modules nécessaires pour certaines fonctions
+# Importation of necessary modules
 from math import log10, sqrt
 from os import listdir
 from tkinter import *
@@ -10,27 +10,27 @@ from tkinter import scrolledtext
 #############################     Basic Functions     ####################################
 
 
-# Toutes les fonctions de bases
-def repertoire_fichiers(r):
+def files_corpus(r):
     """
-    Fonction qui récupére tous les fichiers présents d'un certain répertoire
-    :param r: chaine de caractère représentant le répertoire où les fichiers du corpus sont présent
-    :return: renvoie une liste contenant les noms de chaque fichiers présent dans le répertoire r
+    Function that bring all the files in a repository
+    :param r: string representing the repository
+    :return: list of string representing the files in the repository
     """
     return [f for f in listdir(f"{r}")]
-    # liste en compréhension qui s'occupe de prendre chaque element du répertoire r
+    # Comprehension list  that takes each element from directory r.
 
 
-def exctraction_nom(f):
+def exctraction_name(f):
     """
 
-    :param f: Fichiers sous forme de liste
-    :return: renvoie les noms des présidents sous forme de liste
+    :param f: List representing files
+    :return: List of strings representing the name of president
     """
     nom_president = []
     for fichier in f:
         president = ""
         for lettre in fichier[11:]:
+            # To take only the part of the string corresponding to the name of a president
             if (48 <= ord(lettre) <= 57) or (lettre == "."):
                 break
             else:
@@ -46,7 +46,7 @@ def association_name(f):
     :param f: All files in the repository
     :return: dictinnary {name of president : [files]}
     """
-    List = exctraction_nom(f)
+    List = exctraction_name(f)
     L_aux = ["Emanuel", "Jack", "Valéry", "François", "Nicolas", ""]
     dic = {}
 
@@ -81,42 +81,42 @@ def association_name(f):
 
 def conversion_mini(f):
     """
-    Fonction qui convertit le texte des fichiers en miniscules
-    dans de nouveaux fichier dans le dossier cleaned
-    :param f: noms des fichiers sous forme de liste
-    :return: renvoie rien et créer les noueaux fichiers dans le dossier cleaned
+    Function that converts the text of files to lowercase in new files in the 'cleaned' directory.
+    :param f: List representing the files name
+    :return: None --> Only creating new files in the good repository
     """
-    for fichiers in f:
-        with open(f"speeches/{fichiers}", "r") as fichier:
-            contenu = fichier.readlines()
-        fichier_new = open(f"cleaned/{fichiers}", "w")  # Creation du nouveau fichier dans le dossier 'cleaned'
+    for files in f:
+        with open(f"speeches/{files}", "r") as f1:
+            contenu = f1.readlines()
+        # Creation du nouveau fichier dans le dossier 'cleaned'
+        file_new = open(f"cleaned/{files}", "w")
         for ligne in contenu:
-            fichier_new.write(ligne.lower())
-        fichier_new.close()
+            file_new.write(ligne.lower())
+        file_new.close()
     return None
 
 
-def clean_fichier(f):
+def clean_file(f):
     """
-    Fonction qui "clean" les fichiers afin de supprimer tous les caractéres spéciaux laissant qu'un fichier
-    contenant des mots séparé par des espaces
-    :param f: Nom des fichiers sous forme de list
-    :return: Renvoie rien, change le contenue des fichiers
+    Function that 'cleans' files to remove all special characters,
+    leaving only a file containing words separated by spaces.
+    :param f: List representing the files name
+    :return: None --> Change the content of files
     """
-    for fichiers in f:
-        with open(f"cleaned/{fichiers}", "r") as fichier:
-            contenu = fichier.readlines()
-        fichier = open(f"cleaned/{fichiers}",
-                       "w")  # Réécriture du fichier apres avoir récupérer le contenue (d'où le "w")
-        for ligne in contenu:
+    for files in f:
+        with open(f"cleaned/{files}", "r") as file:
+            content = file.readlines()
+        file = open(f"cleaned/{files}",
+                       "w")  # Rewriting the file after retrieving its content (hence the 'w' mode).
+        for line in content:
             new_ligne = ""
-            for caractere in ligne:
+            for caractere in line:
                 if caractere in "'-":
                     new_ligne += " "
                 elif caractere not in ',;!.?:"_':
                     new_ligne += caractere
-            fichier.write(new_ligne)
-        fichier.close()
+            file.write(new_ligne)
+        file.close()
 
     return None
 
@@ -153,7 +153,7 @@ def words_corpus(list_words):
     punctuation (list from the return of list_words)
     :return: list that represents that are present in the document corpus
     """
-    files = repertoire_fichiers("cleaned")
+    files = files_corpus("cleaned")
     words_present = []
     for word in list_words:
         check = True
@@ -177,18 +177,18 @@ def words_corpus(list_words):
 
 
 # La méthode TF-IDF
-def occ_mots(c):
+def occ_words(c):
     """
-    Fonction qui compte l'occurence d'un mots dans une chaine de caractere et renvoie un dictionnaire
-    associant à chaque mot le nombre de fois qu’il apparait dans la chaine de caractères.
-    :param c: chaine de caractères
-    :return: dictionnaire {chaque mots : occurence du mots}
+    Function that counts the occurrence of each word in a string and
+    returns a dictionary associating each word with the number of times it appears in the string.
+    :param c: String
+    :return: dictionnary {each words : his occurrence}
     """
     dic = {}
-    mots = c.split()  # création d'une liste correspondant au mots de la chaine de caractères
+    mots = c.split()  # Creating a list corresponding to the words in the character string.
     for i in mots:
         occ = 0
-        if i not in dic.keys():  # Afin d'éviter de faire des boucles inutiles si le mots a déjà été traité
+        if i not in dic.keys():  # To avoid unnecessary loops if the word has already been processed.
             for j in mots:
                 if j == i:
                     occ += 1
@@ -196,18 +196,19 @@ def occ_mots(c):
     return dic
 
 
-def idf_mots(rep):
+def idf_words(rep):
     """
     Compute IDF of all words
     :param rep: string that is the directory
     :return: dictionnary {word : IDF}
     """
     dic = {}
-    nb_doc = len(repertoire_fichiers(rep))
-    for i in repertoire_fichiers(rep):
-        with open(f"{rep}/{i}", 'r') as F:
-            L = set(F.read().split())
-        for i in L:
+    nb_doc = len(files_corpus(rep))
+    for file in files_corpus(rep):
+        with open(f"{rep}/{file}", 'r') as F:
+            # To avoid multiple recurrence of element
+            words = set(F.read().split())
+        for i in words:
             if i not in dic.keys():
                 dic[i] = 1
             else:
@@ -217,30 +218,30 @@ def idf_mots(rep):
     return (dic)
 
 
-def matrice_TF_IDF(r):
+def matrix_TF_IDF(r):
     """
-    Fonction qui créer la matrice TF-IDF où chaque ligne représente un mot
-    et chaque colonne représente un document
-    :param r: chaine de caractère représentant le répertoire où les fichiers du corpus sont présent
-    :return: La matrice TF-IDF.
+    Function that creates the TF-IDF matrix where
+    each row represents a word and each column represents a document.
+    :param r: string representing the directory
+    :return: List of list representing the matrix tf-idf
     """
-    fichiers = repertoire_fichiers(r)
-    mots_idf = idf_mots(r)
+    files = files_corpus(r)
+    mots_idf = idf_words(r)
     matrix = []
-    for fichier in fichiers:
-        with open(f"{r}/{fichier}", "r") as f1:
+    for file in files:
+        with open(f"{r}/{file}", "r") as f1:
             contenue = f1.read()
-        tf = occ_mots(contenue)
-        tf_idf_fichiers = []
+        tf = occ_words(contenue)
+        tf_idf_files = []
         for mot in mots_idf:
             if mot in tf:
                 if mots_idf[mot] or tf[mot]:
-                    tf_idf_fichiers.append(tf[mot] * mots_idf[mot])
+                    tf_idf_files.append(tf[mot] * mots_idf[mot])
                 else:
-                    tf_idf_fichiers.append(0.0)  # If idf or tf is equal to 0.0 just put a 0.0
+                    tf_idf_files.append(0.0)  # If idf or tf is equal to 0.0 just put a 0.0
             else:
-                tf_idf_fichiers.append(0.0)  # If the word is not present just put a 0.0
-        matrix.append(tf_idf_fichiers)
+                tf_idf_files.append(0.0)  # If the word is not present just put a 0.0
+        matrix.append(tf_idf_files)
 
     return transpose_matrix(matrix)  # To have the matrix which a row is a word and a column is a file
 
@@ -268,14 +269,14 @@ def TF_IDF(repertory, show=False):
     :param repertory: string(the path to the directory)
     :return: Dictionnary which represent the matrix {word : [TF_IDF for each file]}
     '''
-    D_word_IDF = idf_mots(repertory)
+    D_word_IDF = idf_words(repertory)
     dico = {}
     for words in D_word_IDF.keys():
         dico[words] = []
-    for files in repertoire_fichiers(repertory):
+    for files in files_corpus(repertory):
         with open((repertory + '/' + files), 'r') as file:
             string = file.read()
-            D_word_TF = occ_mots(string)
+            D_word_TF = occ_words(string)
         for words in D_word_IDF.keys():
             if words in D_word_TF.keys():
                 dico[words].append(D_word_TF[words] * D_word_IDF[words])
@@ -313,8 +314,8 @@ def vector(question, rep="cleaned"):
     word_into_string = ''
     for word in words:
         word_into_string += word + ' '
-    frequency_words = occ_mots(word_into_string)
-    idf_corpus = idf_mots(rep)
+    frequency_words = occ_words(word_into_string)
+    idf_corpus = idf_words(rep)
     word_index = {}  # dic --> Index in 'list_vector associate to the word'
     list_vector = []
     index = 0
@@ -331,11 +332,11 @@ def vector(question, rep="cleaned"):
 
 
 def higher_word(rep):
-    '''
+    """
     function that display words with the highest TF-IDF
     :param rep: directory
-    :return: None
-    '''
+    :return: None --> Display
+    """
     dico = TF_IDF(rep)
     dic = dico.copy()
     big = [max(i) for i in dic.values()]
@@ -360,7 +361,7 @@ def least_important_word(rep, recup=False, show=True):
     :return: By default None, if recup is true --> return the list
     """
     list_lest_imp_word = []
-    dic_idf_mots = idf_mots(rep)
+    dic_idf_mots = idf_words(rep)
     # I just need to check if idf = 0 to find if the score TF-IDF of a word is 0 in all files
     for word in dic_idf_mots:
         if dic_idf_mots[word] == 0.0:
@@ -386,9 +387,9 @@ def most_repeated_word(rep, show=False, min_letter=2):
     least_important = least_important_word(rep, recup=True, show=False)
 
     president = input("Enter the name of the president : ").lower()
-    files = [file.lower() for file in repertoire_fichiers(rep)]
+    files = [file.lower() for file in files_corpus(rep)]
     # Taking all name of files (in lower case to make easy the check)
-    names = [name.lower() for name in exctraction_nom(files)]
+    names = [name.lower() for name in exctraction_name(files)]
     # Taking all name of president in files (in lower case to make easy the check)
 
     while president not in names:  # Verify if the word is present
@@ -405,7 +406,7 @@ def most_repeated_word(rep, show=False, min_letter=2):
             # Check if the name of file corresponding to the president because some president has 2 files
             with open(f"{rep}/{file}", "r") as f1:
                 contenue = f1.read()
-            dic_occ_word_temp = occ_mots(contenue)
+            dic_occ_word_temp = occ_words(contenue)
             for key in dic_occ_word_temp:
                 if key not in least_important:  # To exclude least important words
                     # To have a dic with all words in the 2 files and the occurence in the 2 files
@@ -443,8 +444,8 @@ def maxi_keys_dic(dic):
     new_dic = dic
 
     for j in range(len(new_dic)):
-        maxi_val = [i for i in new_dic.values()][0]  # Récupération d'une valeur dans le dic
-        maxi_key = [i for i in new_dic.keys()][0]  # Récupération d'une valeur dans le dic
+        maxi_val = [i for i in new_dic.values()][0]  # Getting a value in the dic
+        maxi_key = [i for i in new_dic.keys()][0]  # Getting a key in the dic
         for i in new_dic:
             if new_dic[i] > maxi_val:
                 maxi_val = new_dic[i]
@@ -462,16 +463,17 @@ def president_word(rep):
     :param rep: directory
     :return: none ( only display )
     '''
-    List_name = association_name(repertoire_fichiers(rep))
+    List_name = association_name(files_corpus(rep))
     word = input("Enter the word that president talk about : ")
+    # compare him by using the lower method because everything is in lower
     if word.lower() in TF_IDF(rep):
         List = TF_IDF(rep)[word.lower()]
-        fichiers = repertoire_fichiers(rep)
+        files = files_corpus(rep)
         seto = set()
         for name in List_name:
             n = 0
             for file in List_name[name]:
-                n += List[fichiers.index(file)]
+                n += List[files.index(file)]
             List_name[name] = n
 
         if List == [0] * len(List):
@@ -500,8 +502,8 @@ def mention_all(rep, max_occ=3, min_letter=6):
     :param min_letter: integer of the minimum number of letter that the user allow
     :return:
     '''
-    dic = idf_mots(rep)
-    fichiers = repertoire_fichiers(rep)
+    dic = idf_words(rep)
+    fichiers = files_corpus(rep)
     for i in dic.copy():
         if dic[i] != 0:
             del dic[i]
@@ -509,7 +511,7 @@ def mention_all(rep, max_occ=3, min_letter=6):
             dic[i] = []
     for file in fichiers:
         with open(f"cleaned/{file}", 'r') as f1:
-            TF = occ_mots(f1.read())
+            TF = occ_words(f1.read())
         for i in dic:
             dic[i].append(TF[i])
     List_word = []
@@ -538,7 +540,7 @@ def first_president(rep, nb_words=1):
     for word in words:
         word_find = False  # To check if the word was found and don't repeat useless loop
         for president in ordered_president:
-            for file in repertoire_fichiers(rep):
+            for file in files_corpus(rep):
                 if president in file:
                     with open(f"{rep}/{file}", "r") as f1:
                         contenue = f1.read()
@@ -665,9 +667,9 @@ def response(question):
     for word in question.split():
         if word.lower() in question_starters.keys():
             answer += question_starters[word.lower()]
-    TF_IDF_Corpus = transpose_matrix(matrice_TF_IDF("cleaned"))
+    TF_IDF_Corpus = transpose_matrix(matrix_TF_IDF("cleaned"))
     TF_IDF_Question = vector(question)[0]
-    Files_Names = repertoire_fichiers("cleaned")
+    Files_Names = files_corpus("cleaned")
     document_file = most_relevant_document(TF_IDF_Corpus, TF_IDF_Question, Files_Names)
     # Let's take the word that is the most important in the question, so with highest tf-idf
     word_important = highest_tf_idf(question)
@@ -721,7 +723,7 @@ def menu(rep):
                 choice_2 = int(input("Enter a choice : "))
 
             if choice_2 == 1:
-                print(matrice_TF_IDF(rep))
+                print(matrix_TF_IDF(rep))
             elif choice_2 == 2:
                 TF_IDF(rep, show=True)
 
@@ -910,7 +912,7 @@ def graphic_menu(rep):
         """
         if button_nb == 1:
             text.delete(1.0, END)  # To delete the text that previously here
-            for word in matrice_TF_IDF(rep):
+            for word in matrix_TF_IDF(rep):
                 text.insert(END, str(word) + '\n')
         elif button_nb == 2:
             text.delete(1.0, END)
@@ -966,8 +968,8 @@ def graphic_menu(rep):
             text.delete(1.0, END)
             min_letter = 6
             max_occ = 3
-            dic = idf_mots(rep)
-            fichiers = repertoire_fichiers(rep)
+            dic = idf_words(rep)
+            fichiers = files_corpus(rep)
             for i in dic.copy():
                 if dic[i] != 0:
                     del dic[i]
@@ -975,7 +977,7 @@ def graphic_menu(rep):
                     dic[i] = []
             for file in fichiers:
                 with open(f"cleaned/{file}", 'r') as f1:
-                    TF = occ_mots(f1.read())
+                    TF = occ_words(f1.read())
                 for i in dic:
                     dic[i].append(TF[i])
             List_word = []
