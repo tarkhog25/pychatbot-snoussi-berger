@@ -601,30 +601,23 @@ def score_similarity(vec_a, vec_b):
     norm_vec_b = norm_vector(vec_b)
     return scalar_prod_a_b / (norm_vec_a * norm_vec_b)
 
-def most_relevant_document(TF_IDF_corpus, TF_IDF_vector, name_of_files):
-    '''
-    function that return the ducument that has the most sens with the question
-    :param TF_IDF_corpus: matrix TF-IDF of the corpus
-    :param TF_IDF_vector: List of The TF-IDF vector of the question
-    :param name_of_files: list of the file name
-    :return: a string with the file name
-    '''
-    dic_word_vector = {}
-    L_result = []
-    for index in range(len(TF_IDF_vector)):
-        if TF_IDF_vector[index] != 0:
-            dic_word_vector[index] = TF_IDF_vector[index]
-    for index in range(len(TF_IDF_corpus)):
-        dif = 0
-        for index_vector in dic_word_vector:
-            if dic_word_vector[index_vector] > TF_IDF_corpus[index][index_vector]:
-                dif += dic_word_vector[index_vector] - TF_IDF_corpus[index][index_vector]
-            else:
-                dif += TF_IDF_corpus[index][index_vector] - dic_word_vector[index_vector]
-        L_result.append(dif)
-
-    min_dif = min(L_result)
-    return(name_of_files[L_result.index(min_dif)])
+def most_relevant_document(TF_IDF_Corpus, TF_IDF_Question, files_names):
+    """
+    Function that find the most relevant document name from a question.
+    :param TF_IDF_Corpus: List of list, corresponding to the matrix TF_IDF of the document corpus
+    :param TF_IDF_Question: List of intengers, corresponding to the vector of the question
+    :param files_names: List of strings, corresponding to the names of the files in the corpus
+    :return: string corresponding to the most relevant document name
+    """
+    vec_a = TF_IDF_Question
+    most_relevant = ""
+    similarity_score_file = 0
+    for i in range(len(files_names)):
+        score = score_similarity(vec_a, TF_IDF_Corpus[i])
+        if score > similarity_score_file:
+            similarity_score_file = score
+            most_relevant = files_names[i]
+    return most_relevant
 
 #######################  Generating a response #########################
 
