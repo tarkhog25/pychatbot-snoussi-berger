@@ -173,33 +173,6 @@ def words_corpus(list_words):
     return words_present
 
 
-def vector(question, rep):
-    """
-    function that return the TF-IDF vector of the question and a dictionary of
-    the words in the question associate to their index in the vector.
-    :param question: string  (the question)
-    :return: tuple ( list [TF-IDF vector], dic {word of the question: index in the list} )
-    """
-    words = words_corpus(list_word(question))
-    # The function "occ_mots" can be only used by giving it a string so transform the list into
-    # a sentence separated by space to use correctly the function "occ_mots"
-    word_into_string = ''
-    for word in words:
-        word_into_string += word + ' '
-    frequency_words = occ_mots(word_into_string)
-    idf_corpus = idf_mots(rep)
-    word_index = {}  # dic --> Words associate to their index in 'list_vector'
-    list_vector = []
-    index = 0
-    for word in idf_corpus:
-        if word in frequency_words:
-            list_vector.append((frequency_words[word] / len(words)) * idf_corpus[word])
-            word_index[word] = index
-        else:
-            list_vector.append(0.0)
-        index += 1
-    return list_vector, word_index
-
 #############################      TF_IDF Functions      ####################################
 
 
@@ -324,6 +297,34 @@ def show_display(dic):
     maxi = max([len(i) for i in dic.keys()])
     for i in dic.keys():
         print(i, ' ' * (maxi - len(i)), ':', ' ', dic[i])
+
+
+def vector(question, rep):
+    """
+    function that return the TF-IDF vector of the question and a dictionary of
+    the words in the question associate to their index in the vector.
+    :param question: string  (the question)
+    :return: tuple ( list [TF-IDF vector], dic {index in the list : word of the question} )
+    """
+    words = words_corpus(list_word(question))
+    # The function "occ_mots" can be only used by giving it a string so transform the list into
+    # a sentence separated by space to use correctly the function "occ_mots"
+    word_into_string = ''
+    for word in words:
+        word_into_string += word + ' '
+    frequency_words = occ_mots(word_into_string)
+    idf_corpus = idf_mots(rep)
+    word_index = {}  # dic --> Index in 'list_vector associate to the word'
+    list_vector = []
+    index = 0
+    for word in idf_corpus:
+        if word in frequency_words:
+            list_vector.append((frequency_words[word] / len(words)) * idf_corpus[word])
+            word_index[index] = word
+        else:
+            list_vector.append(0.0)
+        index += 1
+    return list_vector, word_index
 
 
 #######################      Features      #########################
@@ -599,9 +600,6 @@ def score_similarity(vec_a, vec_b):
     norm_vec_a = norm_vector(vec_a)
     norm_vec_b = norm_vector(vec_b)
     return scalar_prod_a_b / (norm_vec_a * norm_vec_b)
-
-
-
 
 
 #######################  Menu  #########################
@@ -889,4 +887,3 @@ def graphic_menu(rep):
 
     frame.pack(expand=True)
     window.mainloop()
-
