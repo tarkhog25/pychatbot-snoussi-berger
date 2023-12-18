@@ -286,6 +286,7 @@ def TF_IDF(repertory, show=False):
     return (dico)
 
 
+
 def show_display(dic):
     '''
     function that display a dic of the form (word  :  [........]
