@@ -645,6 +645,20 @@ def highest_tf_idf(question):
 
     return maxi_word
 
+def response(question):
+
+    TF_IDF_Corpus = transpose_matrix(matrice_TF_IDF("cleaned"))
+    TF_IDF_Question = vector(question)[0]
+    Files_Names = repertoire_fichiers("cleaned")
+    document_file = most_relevant_document(TF_IDF_Corpus, TF_IDF_Question, Files_Names)
+    # Let's take the word that is the most important in the question, so with highest tf-idf
+    word_important = highest_tf_idf(question)
+    with open(f"cleaned/{document_file}","r") as f1:
+        contents = f1.readlines()
+    for line in contents:
+        if word_important in line:
+            return line
+
 
 #######################  Menu  #########################
 
