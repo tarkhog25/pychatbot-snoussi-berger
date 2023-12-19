@@ -236,11 +236,12 @@ def matrix_TF_IDF(r):
         for mot in mots_idf:
             if mot in tf:
                 if mots_idf[mot] or tf[mot]:
-                    tf_idf_files.append(tf[mot] * mots_idf[mot])
+                    # Using round function to only have number like that 0.00, easier to see and compare for our eyes
+                    tf_idf_files.append(round(tf[mot] * mots_idf[mot], 3))
                 else:
-                    tf_idf_files.append(0.0)  # If idf or tf is equal to 0.0 just put a 0.0
+                    tf_idf_files.append(0.00)  # If idf or tf is equal to 0.0 just put a 0.0
             else:
-                tf_idf_files.append(0.0)  # If the word is not present just put a 0.0
+                tf_idf_files.append(0.00)  # If the word is not present just put a 0.0
         matrix.append(tf_idf_files)
 
     return transpose_matrix(matrix)  # To have the matrix which a row is a word and a column is a file
@@ -262,7 +263,7 @@ def transpose_matrix(matrix):
     return new_matrix
 
 
-def TF_IDF(repertory, show=False):
+def Dic_TF_IDF(repertory, show=False):
     '''
     Function that compute the matrix TF-IDF not as a list but as a dictionnary
     :param show: If display the matrix or not
@@ -279,9 +280,10 @@ def TF_IDF(repertory, show=False):
             D_word_TF = occ_words(string)
         for words in D_word_IDF.keys():
             if words in D_word_TF.keys():
-                dico[words].append(D_word_TF[words] * D_word_IDF[words])
+                # Using round function to only have number like that 0.00, easier to see and compare for our eyes
+                dico[words].append(round(D_word_TF[words] * D_word_IDF[words], 3))
             else:
-                dico[words].append(0)
+                dico[words].append(0.00)
     if show:
         show_display(dico)
     return (dico)
@@ -290,15 +292,23 @@ def TF_IDF(repertory, show=False):
 
 def show_display(dic):
     '''
-    function that display a dic of the form (word  :  [........]
-                                             word2 :  [........]
+    function that display a dic of the form (word  :  [..//...//...]
+                                             word2 :  [..//...//...]
                                              ...................)
     :param dic: a dictionary of the form (key : value .....)
     :return: none just a diplay
     '''
     maxi = max([len(i) for i in dic.keys()])
     for i in dic.keys():
-        print(i, ' ' * (maxi - len(i)), ':', ' ', dic[i])
+        list_tf_idf = dic[i]
+        display_tf_idf = ""
+        for value in range(len(list_tf_idf)):
+            # Check that if the last don't put "//"
+            if value != len(list_tf_idf)-1:
+                display_tf_idf += str(list_tf_idf[value]) + " // "
+            else:
+                display_tf_idf += str(list_tf_idf[value])
+        print(i, ' ' * (maxi - len(i)), ':', ' ', display_tf_idf)
 
 
 def vector(question, rep="cleaned"):
@@ -337,7 +347,7 @@ def higher_word(rep):
     :param rep: directory
     :return: None --> Display
     """
-    dico = TF_IDF(rep)
+    dico = Dic_TF_IDF(rep)
     dic = dico.copy()
     big = [max(i) for i in dic.values()]
     n = int(input("Enter the number of word that you want : "))
@@ -466,8 +476,8 @@ def president_word(rep):
     List_name = association_name(files_corpus(rep))
     word = input("Enter the word that president talk about : ")
     # compare him by using the lower method because everything is in lower
-    if word.lower() in TF_IDF(rep):
-        List = TF_IDF(rep)[word.lower()]
+    if word.lower() in Dic_TF_IDF(rep):
+        List = Dic_TF_IDF(rep)[word.lower()]
         files = files_corpus(rep)
         seto = set()
         for name in List_name:
@@ -726,7 +736,7 @@ def menu(rep):
             if choice_2 == 1:
                 print(matrix_TF_IDF(rep))
             elif choice_2 == 2:
-                TF_IDF(rep, show=True)
+                Dic_TF_IDF(rep, show=True)
 
         elif choice_1 == 3:
             print("╔═════════════════════════════════════════════════════════════════════════════════════════════════╗")
@@ -751,7 +761,7 @@ def menu(rep):
             elif choice_3 == 3:
                 mini_letter = int(input("\033[1;35mWhat is the minimum of letter of word that you want to display ? : "))
                 while mini_letter <= 1:
-                    print("\033[1;35mEnter a positive value that is superior of 1 !! ")
+                    print("\033[1;35mEnter a positive value superior to 1 !! ")
                     mini_letter = int(input("\033[1;35mWhat is the minimum of letter of word that you want to display ? : "))
 
                 most_repeated_word(rep, min_letter=mini_letter, show=True)
@@ -935,7 +945,7 @@ def graphic_menu(rep):
                 text.insert(END, str(word) + '\n')
         elif button_nb == 2:
             text.delete(1.0, END)
-            dic = TF_IDF(rep)
+            dic = Dic_TF_IDF(rep)
             maxi = max([len(i) for i in dic.keys()])
             for i in dic.keys():
                 texte = i + ' ' * (maxi - len(i)) + ':' + ' ' + str(dic[i])
@@ -953,7 +963,7 @@ def graphic_menu(rep):
             text.insert(END, str(least_important_word(rep, show=False, recup=True)))
         elif button_nb == 2:
             text.delete(1.0, END)
-            dic = TF_IDF(rep)
+            dic = Dic_TF_IDF(rep)
             big = [max(i) for i in dic.values()]
             n = 5  # By default, will display the 5 word with the highest TF_IDF score
             for i in range(n):
