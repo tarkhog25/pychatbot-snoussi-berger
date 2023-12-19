@@ -1023,17 +1023,59 @@ def graphic_menu(rep):
             for i in List_word:
                 text.insert(END, i + '\n')
 
+    def new_window_chatbot():
+        window_chatbot = Toplevel(window)
+        window_chatbot.title("ChatBot")
+        window_chatbot.geometry("1120x600")
+        window_chatbot.config(background='#3AA79F')
+
+        frame_chatbot = Frame(window_chatbot)
+        frame_texte = Frame(window_chatbot)
+        def ask_question(text):
+            """
+            Put a response of the question
+            :return: None
+            """
+            question_text = entry.get()
+            response_text = response(question_text)
+            text.delete(1.0, END)
+            text.insert(END, f"{response_text[0]} \n\nFrom {response_text[1]} \n")
+
+
+        question_label = Label(frame_texte, text="Bienvenue sur l'espace ChatBot \n N'hésitez pas à poser "
+                                                    "une question", font=("Helvetica", 14))
+        question_label.pack()
+
+        text = scrolledtext.ScrolledText(window_chatbot, wrap=WORD, width=150, height=20)
+        text.pack(side=BOTTOM, pady=20)
+
+        entry = Entry(frame_chatbot, width=30)
+        entry.grid(row=0, column=0)
+
+        ask_button = Button(frame_chatbot, text="Poser la question", command= lambda: ask_question(text))
+        ask_button.grid(row=1, column=0)
+
+        frame_chatbot.pack(expand=True)
+        frame_texte.pack(side=TOP, pady=20)
+
+        # Start the window
+        window_chatbot.mainloop()
+
     # Creation of Button
     button_1 = Button(frame, text='Matrix', font=("Courrier", 25), bg='white', fg="#3AA79F", command=new_window_matrix)
-    button_1.grid(row=0, sticky="ew", pady=2)
+    button_1.grid(row=1, sticky="ew", pady=2)
 
     button_2 = Button(frame, text='Features', font=("Courrier", 25), bg='white', fg="#3AA79F",
                       command=new_window_features)
-    button_2.grid(row=1, sticky="ew", pady=2)
+    button_2.grid(row=2, sticky="ew", pady=2)
 
     button_3 = Button(frame, text='Exit', font=("Courrier", 25), bg='white', fg="#3AA79F", command=window.destroy)
     # Pour fermer la fenetre
-    button_3.grid(row=2, sticky="ew", pady=2)
+    button_3.grid(row=3, sticky="ew", pady=2)
+
+    button_2 = Button(frame, text='ChatBot', font=("Courrier", 25), bg='white', fg="#3AA79F",
+                      command=new_window_chatbot)
+    button_2.grid(row=0, sticky="ew", pady=2)
 
     frame.pack(expand=True)
     window.mainloop()
