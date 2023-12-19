@@ -703,70 +703,71 @@ def menu(rep):
         print("╠╚█████╔╝██║░░██║██║░░██║░░░██║░░░██████╦╝╚█████╔╝░░░██║░░░╣")
         print("╠░╚════╝░╚═╝░░╚═╝╚═╝░░╚═╝░░░╚═╝░░░╚═════╝░░╚════╝░░░░╚═╝░░░╣")
         print("╠══════════════════════════════════════════════════════════╣")
-        print("1)                      🔢/𝕄𝕒𝕥𝕣𝕚𝕩\🔢                       ╣")
-        print("2)                     🚀/𝔽𝕖𝕒𝕥𝕦𝕣𝕖𝕤\🚀                      ╣")
-        print("3)                       🚪/𝔼𝕩𝕚𝕥\🚪                        ╣")
+        print("1)                   🤖💬/ℂ𝕙𝕒𝕥𝔹𝕠𝕥\🤖💬                    ╣")
+        print("2)                      🔢/𝕄𝕒𝕥𝕣𝕚𝕩\🔢                       ╣")
+        print("3)                     🚀/𝔽𝕖𝕒𝕥𝕦𝕣𝕖𝕤\🚀                      ╣")
+        print("4)                       🚪/𝔼𝕩𝕚𝕥\🚪                        ╣")
         print("╚══════════════════════════════════════════════════════════╝")
 
-        choice_1 = int(input("Enter a choice : "))
+        choice_1 = int(input("\033[1;35mEnter a choice : "))
 
-        if choice_1 == 1:
+        if choice_1 == 2:
             print("╔══════════════════════════════════════════════╗")
-            print("1)         Display The Matrix TF-IDF           ╣")
-            print("2)   Display The Matrix TF-IDF word by word    ╣")
+            print("1)         𝔻𝕚𝕤𝕡𝕝𝕒𝕪 𝕋𝕙𝕖 𝕄𝕒𝕥𝕣𝕚𝕩 𝕋𝔽-𝕀𝔻𝔽           ╣")
+            print("2)   𝔻𝕚𝕤𝕡𝕝𝕒𝕪 𝕋𝕙𝕖 𝕄𝕒𝕥𝕣𝕚𝕩 𝕋𝔽-𝕀𝔻𝔽 𝕨𝕠𝕣𝕕 𝕓𝕪 𝕨𝕠𝕣𝕕    ╣")
             print("3)               🚪/𝔼𝕩𝕚𝕥\🚪                    ╣")
             print("╚══════════════════════════════════════════════╝")
 
-            choice_2 = int(input("Enter a choice : "))
+            choice_2 = int(input("\033[1;35mEnter a choice : "))
             while not (0 < choice_2 <= 3):
-                print("Invalid choice try again ")
-                choice_2 = int(input("Enter a choice : "))
+                print("\033[1;35mInvalid choice try again ")
+                choice_2 = int(input("\033[1;35mEnter a choice : "))
 
             if choice_2 == 1:
                 print(matrix_TF_IDF(rep))
             elif choice_2 == 2:
                 TF_IDF(rep, show=True)
 
-        elif choice_1 == 2:
+        elif choice_1 == 3:
             print("╔═════════════════════════════════════════════════════════════════════════════════════════════════╗")
-            print("1)                Display The list of least important words in the document corpus                ╣")
-            print("2)                       Display the word(s) with the highest TD-IDF score                        ╣")
-            print("3)                       Display the most repeated word(s) by a President                         ╣")
-            print("4)    Display the president that spoke about a word and the one who repeated it the most times    ╣")
-            print("5)                     Display the first president who talk about some words                      ╣")
-            print("6)                           Display words that all president mention                             ╣")
+            print("1)                𝔻𝕚𝕤𝕡𝕝𝕒𝕪 𝕋𝕙𝕖 𝕝𝕚𝕤𝕥 𝕠𝕗 𝕝𝕖𝕒𝕤𝕥 𝕚𝕞𝕡𝕠𝕣𝕥𝕒𝕟𝕥 𝕨𝕠𝕣𝕕𝕤 𝕚𝕟 𝕥𝕙𝕖 𝕕𝕠𝕔𝕦𝕞𝕖𝕟𝕥 𝕔𝕠𝕣𝕡𝕦𝕤                ╣")
+            print("2)                       𝔻𝕚𝕤𝕡𝕝𝕒𝕪 𝕥𝕙𝕖 𝕨𝕠𝕣𝕕(𝕤) 𝕨𝕚𝕥𝕙 𝕥𝕙𝕖 𝕙𝕚𝕘𝕙𝕖𝕤𝕥 𝕋𝔻-𝕀𝔻𝔽 𝕤𝕔𝕠𝕣𝕖                        ╣")
+            print("3)                       𝔻𝕚𝕤𝕡𝕝𝕒𝕪 𝕥𝕙𝕖 𝕞𝕠𝕤𝕥 𝕣𝕖𝕡𝕖𝕒𝕥𝕖𝕕 𝕨𝕠𝕣𝕕(𝕤) 𝕓𝕪 𝕒 ℙ𝕣𝕖𝕤𝕚𝕕𝕖𝕟𝕥                         ╣")
+            print("4)    𝔻𝕚𝕤𝕡𝕝𝕒𝕪 𝕥𝕙𝕖 𝕡𝕣𝕖𝕤𝕚𝕕𝕖𝕟𝕥 𝕥𝕙𝕒𝕥 𝕤𝕡𝕠𝕜𝕖 𝕒𝕓𝕠𝕦𝕥 𝕒 𝕨𝕠𝕣𝕕 𝕒𝕟𝕕 𝕥𝕙𝕖 𝕠𝕟𝕖 𝕨𝕙𝕠 𝕣𝕖𝕡𝕖𝕒𝕥𝕖𝕕 𝕚𝕥 𝕥𝕙𝕖 𝕞𝕠𝕤𝕥 𝕥𝕚𝕞𝕖𝕤    ╣")
+            print("5)                     𝔻𝕚𝕤𝕡𝕝𝕒𝕪 𝕥𝕙𝕖 𝕗𝕚𝕣𝕤𝕥 𝕡𝕣𝕖𝕤𝕚𝕕𝕖𝕟𝕥 𝕨𝕙𝕠 𝕥𝕒𝕝𝕜 𝕒𝕓𝕠𝕦𝕥 𝕤𝕠𝕞𝕖 𝕨𝕠𝕣𝕕𝕤                      ╣")
+            print("6)                           𝔻𝕚𝕤𝕡𝕝𝕒𝕪 𝕨𝕠𝕣𝕕𝕤 𝕥𝕙𝕒𝕥 𝕒𝕝𝕝 𝕡𝕣𝕖𝕤𝕚𝕕𝕖𝕟𝕥 𝕞𝕖𝕟𝕥𝕚𝕠𝕟                             ╣")
             print("7)                                         🚪/𝔼𝕩𝕚𝕥\🚪                                             ╣")
             print("╚═════════════════════════════════════════════════════════════════════════════════════════════════╝")
 
-            choice_3 = int(input("Enter a choice : "))
+            choice_3 = int(input("\033[1;35mEnter a choice : "))
             while not (0 < choice_3 <= 7):
-                print("Invalid choice try again ")
-                choice_3 = int(input("Enter a choice : "))
+                print("\033[1;35mInvalid choice try again ")
+                choice_3 = int(input("\033[1;35mEnter a choice : "))
 
             if choice_3 == 1:
                 least_important_word(rep)
             elif choice_3 == 2:
                 higher_word(rep)
             elif choice_3 == 3:
-                mini_letter = int(input("What is the minimum of letter of word that you want to display ? : "))
+                mini_letter = int(input("\033[1;35mWhat is the minimum of letter of word that you want to display ? : "))
                 while mini_letter <= 1:
-                    print("Enter a positive value that is superior of 1 !! ")
-                    mini_letter = int(input("What is the minimum of letter of word that you want to display ? : "))
+                    print("\033[1;35mEnter a positive value that is superior of 1 !! ")
+                    mini_letter = int(input("\033[1;35mWhat is the minimum of letter of word that you want to display ? : "))
 
                 most_repeated_word(rep, min_letter=mini_letter, show=True)
             elif choice_3 == 4:
                 president_word(rep)
             elif choice_3 == 5:
-                nb_word = int(input("How many words you want to display ? : "))
+                nb_word = int(input("\033[1;35mHow many words you want to display ? : "))
                 while nb_word <= 0:
-                    print("Enter a positive non zeo value !!")
-                    nb_word = int(input("How many words you want to display ? : "))
+                    print("\033[1;35mEnter a positive non zeo value !!")
+                    nb_word = int(input("\033[1;35mHow many words you want to display ? : "))
 
                 first_president(rep, nb_words=nb_word)
             elif choice_3 == 6:
                 mention_all(rep)
 
-        elif choice_1 == 3:
+        elif choice_1 == 4:
             print("╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════╗")
             print("║████████╗██╗░░██╗░█████╗░███╗░░██╗██╗░░██╗        ██╗░░░██╗░█████╗░██╗░░░██╗       ███████╗░█████╗░██████╗░║")
             print("║░░░██║░░░███████║███████║██╔██╗██║█████═╝░        ░╚████╔╝░██║░░██║██║░░░██║       █████╗░░██║░░██║██████╔╝║")
@@ -788,19 +789,25 @@ def menu(rep):
             print("║                        ╚█████╔╝██║░░██║██║░░██║██████╦╝╚█████╔╝░░░██║░░░                                  ║")
             print("║                        ░╚════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚═════╝░░╚════╝░░░░╚═╝░░░                                  ║")
             print("╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════╝")
-            """
-            print("╔═══════════════════════════════════════════╗")
-            print("║             Merci d'avoir utilisé         ║")
-            print("║                  le ChatBot!              ║")
-            print(f"║                  {'🚪'}                  ║")
-            print("╚═══════════════════════════════════════════╝")
-            """
             break
 
+        elif choice_1 == 1:
+            print("╔══════════════════════════════════════════════╗")
+            print("╠                                              ╣")
+            print("╠           𝔸𝕤𝕜 𝕐𝕠𝕦𝕣 𝕢𝕦𝕖𝕤𝕥𝕚𝕠𝕟 🤔               ╣")
+            print("╠                                              ╣")
+            print("╚══════════════════════════════════════════════╝")
+            question = input("------> ")
+            answer = response(question)
+            print("\033[1;36m𝕋𝕙𝕖 𝕒𝕟𝕤𝕨𝕖𝕣 : ")
+            print(f"\033[1;32m𝕋{answer}")
+
+
+
         else:
-            print("Invalid Option. Try Again !")
+            print("\033[1;35mInvalid Option. Try Again !")
 
-
+print("\033[1;35m𝕋𝕙𝕖 𝕒𝕟𝕤𝕨𝕖𝕣 : ")
 def graphic_menu(rep):
     # Creation of the window
     window = Tk()
