@@ -648,16 +648,16 @@ def response(question):
     """
     answer = ""
     concluding_phrases = [
-        ", j'espère que cela répond à votre question. Si vous avez d'autres préoccupations, n'hésitez pas à demander !",
-        ", si vous avez besoin de plus d'informations, je suis là pour vous. Posez-moi une autre question quand vous le souhaitez !",
-        ", n'hésitez pas à me solliciter si vous avez d'autres questions. Je suis là pour vous!",
-        ", c'était un plaisir de vous aider. Si vous avez d'autres questions, n'hésitez pas à les poser.",
-        ", si quelque chose n'est pas clair ou si vous avez besoin de plus d'informations, faites-le moi savoir. Je suis là pour vous!",
-        ", j'espère que cette réponse vous a été utile. Si vous avez des questions supplémentaires, n'hésitez pas à les poser.",
-        ", merci de discuter avec moi! Si vous avez d'autres questions, je suis prêt à y répondre.",
-        ", n'oubliez pas que je suis là pour vous. Si vous avez besoin de plus d'aide, n'hésitez pas à demander.",
-        ", c'est toujours un plaisir d'interagir avec vous. Si vous avez d'autres questions, je suis disponible.",
-        ", j'espère que vous avez trouvé ma réponse utile. Si vous avez d'autres questions, n'hésitez pas à les poser."
+        ". J'espère que cela répond à votre question. Si vous avez d'autres préoccupations, n'hésitez pas à demander !",
+        ". Si vous avez besoin de plus d'informations, je suis là pour vous. Posez-moi une autre question quand vous le souhaitez !",
+        ". N'hésitez pas à me solliciter si vous avez d'autres questions. Je suis là pour vous!",
+        ". C'était un plaisir de vous aider. Si vous avez d'autres questions, n'hésitez pas à les poser.",
+        ". Si quelque chose n'est pas clair ou si vous avez besoin de plus d'informations, faites-le moi savoir. Je suis là pour vous!",
+        ". J'espère que cette réponse vous a été utile. Si vous avez des questions supplémentaires, n'hésitez pas à les poser.",
+        ". Merci de discuter avec moi! Si vous avez d'autres questions, je suis prêt à y répondre.",
+        ". N'oubliez pas que je suis là pour vous. Si vous avez besoin de plus d'aide, n'hésitez pas à demander.",
+        ". C'est toujours un plaisir d'interagir avec vous. Si vous avez d'autres questions, je suis disponible.",
+        ". J'espère que vous avez trouvé ma réponse utile. Si vous avez d'autres questions, n'hésitez pas à les poser."
     ]
     question_starters = {"comment": "Après analyse, ",
                          "pourquoi": "Car, ",
@@ -792,22 +792,33 @@ def menu(rep):
             break
 
         elif choice_1 == 1:
-            print("╔══════════════════════════════════════════════╗")
-            print("╠                                              ╣")
-            print("╠           𝔸𝕤𝕜 𝕐𝕠𝕦𝕣 𝕢𝕦𝕖𝕤𝕥𝕚𝕠𝕟 🤔               ╣")
-            print("╠                                              ╣")
-            print("╚══════════════════════════════════════════════╝")
-            question = input("------> ")
-            answer = response(question)
-            print("\033[1;36m𝕋𝕙𝕖 𝕒𝕟𝕤𝕨𝕖𝕣 : ")
-            print(f"\033[1;32m𝕋{answer}")
+            while True:
+                print("╔══════════════════════════════════════════════╗")
+                print("╠                                              ╣")
+                print("╠           𝔸𝕤𝕜 𝕐𝕠𝕦𝕣 𝕢𝕦𝕖𝕤𝕥𝕚𝕠𝕟 🤔               ╣")
+                print("╠                                              ╣")
+                print("╚══════════════════════════════════════════════╝")
+                question = input("------> ")
+                answer = response(question)
+                print("\033[1;36m𝕋𝕙𝕖 𝕒𝕟𝕤𝕨𝕖𝕣 : ")
+                print(f"\033[1;32m{answer}")
+                print("\033[1;35m𝔻𝕠 𝕪𝕠𝕦 𝕨𝕒𝕟𝕥 𝕥𝕠 𝕒𝕤𝕜 𝕒𝕟𝕠𝕥𝕙𝕖𝕣 𝕢𝕦𝕖𝕤𝕥𝕚𝕠𝕟 ❔")
+                print("╔══════════════════════════════════════════════╗")
+                print("╠   1/ 𝕪𝕖𝕤                            2/ 𝕟𝕠    ╣")
+                print("╚══════════════════════════════════════════════╝")
+                choice_4 = int(input())
+                if choice_4 == 2:
+                    break
+                elif choice_4 != 1:
+                    print("\033[1;35mInvalid Option. 𝕊𝕠 𝕚𝕥 𝕨𝕠𝕦𝕝𝕕 𝕓𝕖 𝕟𝕠")
+                    break
+
 
 
 
         else:
             print("\033[1;35mInvalid Option. Try Again !")
 
-print("\033[1;35m𝕋𝕙𝕖 𝕒𝕟𝕤𝕨𝕖𝕣 : ")
 def graphic_menu(rep):
     # Creation of the window
     window = Tk()
